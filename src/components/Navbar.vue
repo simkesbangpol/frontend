@@ -1,36 +1,58 @@
 <template>
-    <div>
-        <b-navbar toggleable="lg" type="dark" variant="info">
-            <b-navbar-brand href="#">Sistem Informasi Pelaporan</b-navbar-brand>
+  <div>
+    <v-app-bar
+      color="deep-purple accent-4"
+      dense
+      dark
+    >
+      <v-app-bar-nav-icon></v-app-bar-nav-icon>
 
-            <b-navbar-toggle target="nav-collapse"></b-navbar-toggle>
+      <v-toolbar-title>Sistem Aplikasi Pelaporan</v-toolbar-title>
 
-            <b-collapse id="nav-collapse" is-nav>
-            <!-- <b-navbar-nav>
-                <b-nav-item href="#">Link</b-nav-item>
-                <b-nav-item href="#" disabled>Disabled</b-nav-item>
-            </b-navbar-nav> -->
+      <v-spacer></v-spacer>
 
-                <!-- Right aligned nav items -->
-                <b-navbar-nav class="ml-auto">
+      <v-menu
+        left
+        bottom
+      >
+        <template v-slot:activator="{ on, attrs }">
+          <v-btn
+            text
+            v-bind="attrs"
+            v-on="on"
+          >
+            <v-icon left>mdi-account-circle</v-icon>
+            Username
+            <v-icon right>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
 
-                    <b-nav-item-dropdown right>
-                        <!-- Using 'button-content' slot -->
-                        <template #button-content>
-                            <em><b-icon-person-circle class="mr-2"/>User</em>
-                        </template>
-                        <b-dropdown-item href="#"><b-icon-person-fill class="mr-2"/>Profil</b-dropdown-item>
-                        <b-dropdown-item href="#"><b-icon-box-arrow-right class="mr-2"/>Keluar</b-dropdown-item>
-                    </b-nav-item-dropdown>
-                </b-navbar-nav>
-            </b-collapse>
-        </b-navbar>
-    </div>
+        <v-list>
+          <v-list-item
+            v-for="n in items"
+            :key="n"
+            @click="() => {}"
+          >
+            <v-icon left>{{ n.icon }}</v-icon>
+            <v-list-item-title>{{ n.menu_name }}</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-app-bar>
+  </div>
 </template>
 
 <script>
 export default {
-    name:"Navbar"
+    name:"Navbar",
+  data() {
+    return {
+      items: [
+        { menu_name: 'Profil', icon: 'mdi-account-settings' },
+        { menu_name: 'Log Out', icon: 'mdi-logout' },
+      ]
+    }
+  }
 }
 </script>
 

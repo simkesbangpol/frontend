@@ -1,6 +1,28 @@
 .router-link-exact-active {
     font-weight: bold
 }
+.screen-container {
+    /* display: flex; */
+    flex-direction: column;
+}
+.container-navbar {
+    /* width: "100%"; */
+    height: auto;
+}
+.container-sidebar {
+    /* display: flex; */
+    /* flex-direction: row; */
+    justify-content: left;
+}
+.container-content {
+    background: green;
+    display: flex;
+    flex-direction: row;
+}
+.container-body {
+    width: 100%;
+    background: white;
+}
 .report-container {
     width: 100%;
     height: auto;

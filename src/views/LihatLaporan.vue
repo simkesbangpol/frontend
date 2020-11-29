@@ -1,8 +1,15 @@
 <template>
-  <div>
-    <Navbar />
-    <Sidebar />
-    <h1>Lihat Laporan</h1>
+  <div class="screen-container">
+    <div class="container-navbar">
+      <Navbar />
+    </div>
+
+    <div class="container-content">
+      <div class="container-sidebar">
+        <Sidebar />
+      </div>
+        <h1>Lihat Laporan</h1>
+      </div>
   </div>
 </template>
 

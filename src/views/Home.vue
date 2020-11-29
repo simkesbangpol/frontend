@@ -1,72 +1,123 @@
 <template>
-  <div class="home">
-    <Navbar />
-    <Sidebar />
-    <div>
-      <b-card
-        title="Selamat Datang di Sistem Informasi Pelaporan"
-        tag="article"
-        style="background: #dbdbdb;"
-        class="mb-2"
-      >
-        <b-card-text>
-          Sistem ini adalah sistem untuk merekap seluruh laporan kejadian yang berkaitan dengan ideologi, politik, ekonomi, sosial, dan budaya di lingkungan Kabupaten Tangerang.
-        </b-card-text>
+  <div class="screen-container">
+    <div class="container-navbar">
+      <Navbar />
+    </div>
 
-        <b-button class="mb-2" variant="primary" to="/buat-laporan">Buat  Laporan</b-button>
-      </b-card>
-    </div>
-    
-    <div>
-      <b-card
-        title="Jumlah Laporan Peristiwa"
-        tag="article"
-        style="background: #dbdbdb;"
-        class="mb-2"
-      >
-        
-      <div class="report-container">
-        <div class="box">
-          <b-icon-envelope-fill class="mr-2"/>
-          <div>1</div>
-        </div>
-        <div class="box">
-          <b-icon-envelope-fill class="mr-2"/>
-          <div>2</div>
-        </div>
-        <div class="box">
-          <b-icon-envelope-fill class="mr-2"/>
-          <div>3</div>
-        </div>
-        <div class="box">
-          <b-icon-envelope-fill class="mr-2"/>
-          <div>4</div>
-        </div>
-        <div class="box">
-          <b-icon-envelope-fill class="mr-2"/>
-          <div>5</div>
-        </div>
+    <div class="container-content">
+      <div class="container-sidebar">
+        <Sidebar />
       </div>
-      </b-card>
-    </div>
-    
-    <!-- <div> -->
-      <!-- <b-card
-        style="background: white;"
-        class="mb-2"
-      > -->
+      <div class="container-body">
+        <div>
+          <v-card
+            style="background: #dbdbdb;"
+            class="mb-2"
+          >
+            <v-card-title>Selamat Datang di Sistem Informasi Pelaporan</v-card-title>
+            <v-card-text>
+              Sistem ini adalah sistem untuk merekap seluruh laporan kejadian yang berkaitan dengan ideologi, politik, ekonomi, sosial, dan budaya di lingkungan Kabupaten Tangerang.
+            </v-card-text>
+
+            <v-card-actions>
+              <v-btn color="primary" to="/buat-laporan">Buat  Laporan</v-btn>
+            </v-card-actions>
+
+          </v-card>
+        </div>
+        
+        <div>
+          <v-card
+            style="background: #dbdbdb;"
+            class="mb-2"
+          >
+          <v-card-title>Jumlah Laporan Peristiwa</v-card-title>
+            
+          <v-card-text>
+            <div class="report-container">
+              <div class="box">
+                <b-icon-envelope-fill class="mr-2"/>
+                <div>1</div>
+              </div>
+              <div class="box">
+                <b-icon-envelope-fill class="mr-2"/>
+                <div>2</div>
+              </div>
+              <div class="box">
+                <b-icon-envelope-fill class="mr-2"/>
+                <div>3</div>
+              </div>
+              <div class="box">
+                <b-icon-envelope-fill class="mr-2"/>
+                <div>4</div>
+              </div>
+              <div class="box">
+                <b-icon-envelope-fill class="mr-2"/>
+                <div>5</div>
+              </div>
+            </div>
+          </v-card-text>
+          </v-card>
+        </div>
+        
         <div class="report-table-container">
           <div class="report-each-table-container">
-            <h4>Laporan Terbaru</h4>
-            <b-table striped hover :items="items"></b-table>
+            <h5>Laporan Terbaru</h5>
+            <!-- <b-table striped hover :items="items"></b-table> -->
+            <v-simple-table dense>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Name
+                    </th>
+                    <!-- <th class="text-left">
+                      Calories
+                    </th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in items"
+                    :key="item.first_name"
+                  >
+                    <td>{{ item.first_name }}</td>
+                    <!-- <td>{{ item.calories }}</td> -->
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </div>
           <div class="report-each-table-container">
-            <h4>Laporan Sedang Diproses</h4>
-            <b-table striped hover :items="items"></b-table>
+            <h5>Laporan Sedang Diproses</h5>
+            <!-- <b-table striped hover :items="items"></b-table> -->
+            <v-simple-table dense>
+              <template v-slot:default>
+                <thead>
+                  <tr>
+                    <th class="text-left">
+                      Name
+                    </th>
+                    <!-- <th class="text-left">
+                      Calories
+                    </th> -->
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr
+                    v-for="item in items"
+                    :key="item.first_name"
+                  >
+                    <td>{{ item.first_name }}</td>
+                    <!-- <td>{{ item.calories }}</td> -->
+                  </tr>
+                </tbody>
+              </template>
+            </v-simple-table>
           </div>
         </div>
-      <!-- </b-card> -->
-    <!-- </div> -->
+      </div>
+    </div>
   </div>
 </template>
 
