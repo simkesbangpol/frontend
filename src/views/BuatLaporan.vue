@@ -1,28 +1,18 @@
 <template>
-  <div class="screen-container">
-    <div class="container-navbar">
-      <Navbar />
-    </div>
-
-    <div class="container-content">
-      <div class="container-sidebar">
-        <Sidebar />
-      </div>
+  <div>
+    <h1 class="subheading grey--text">Buat Laporan</h1>
+    <v-container>
       <h1>Buat Laporan</h1>
-    </div>
+    </v-container>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import Navbar from '@/components/Navbar.vue'
-import Sidebar from '@/components/Sidebar.vue'
 
 export default {
   name: 'BuatLaporan',
   components: {
-    Navbar,
-    Sidebar
   }
 }
 </script>

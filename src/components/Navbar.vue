@@ -2,10 +2,10 @@
   <div>
     <v-app-bar
       color="deep-purple accent-4"
-      dense
       dark
+      fixed
     >
-      <v-app-bar-nav-icon></v-app-bar-nav-icon>
+      <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
 
       <v-toolbar-title>Sistem Aplikasi Pelaporan</v-toolbar-title>
 
@@ -14,6 +14,7 @@
       <v-menu
         left
         bottom
+        offset-y
       >
         <template v-slot:activator="{ on, attrs }">
           <v-btn
@@ -39,6 +40,23 @@
         </v-list>
       </v-menu>
     </v-app-bar>
+      <v-navigation-drawer  v-model="drawer" dark app class="red darken-4 sidebar">
+        <v-layout column align-center>
+          <v-flex class="mt-5"> 
+            <p class="white--text subheading mt-1 text-center">Menu</p>
+          </v-flex>
+        </v-layout>
+        <v-list flat>
+          <v-list-item v-for="link in menu"  :key="link.text" router :to="link.route" active-class="border">
+            <v-list-item-action>
+              <v-icon >{{link.icon}}</v-icon>
+            </v-list-item-action>
+            <v-list-item-content >
+              <v-list-item-title >{{link.title}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+        </v-list>
+      </v-navigation-drawer>
   </div>
 </template>
 
@@ -47,6 +65,13 @@ export default {
     name:"Navbar",
   data() {
     return {
+      drawer: false,
+      menu: [
+        { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
+        { title: 'Buat Laporan', icon: 'mdi-image', route: '/buat-laporan' },
+        { title: 'Laporan Saya', icon: 'mdi-help-box', route: '/laporan-saya' },
+        { title: 'Lihat Laporan', icon: 'mdi-help-box', route: '/lihat-laporan' },
+      ],
       items: [
         { menu_name: 'Profil', icon: 'mdi-account-settings' },
         { menu_name: 'Log Out', icon: 'mdi-logout' },
@@ -57,5 +82,15 @@ export default {
 </script>
 
 <style>
+@media screen and (max-width:2000px){
+    .sidebar {
+      margin-top: 64px;
+    }
+}
 
+@media screen and (max-width:958px){
+    .sidebar {
+      margin-top: 56px;
+    }
+}
 </style>
