@@ -1,6 +1,5 @@
 <template>
   <div>
-    <h1 class="subheading grey--text">Dashboard</h1>
     <v-container>
       <v-layout column wrap>
         <v-flex sm6 xs12 md6 lg3 >
@@ -71,11 +70,12 @@
         </div>
       </div>
       
-      <v-layout row wrap style="background: red; margin-top: 10px">
-        <v-flex style="flex-grow: 2;">
-          <v-card class="mr-1">
-            <v-card-title style="flex-shrink: 2; background: blue;"><v-icon>mdi-message-alert</v-icon>Laporan Terbaru</v-card-title>
+      <div style="flex-direction: row; flex-wrap: wrap; display: flex; border-radius: 5px; justify-content: space-between;">
+        <div class="table-container">
+          <v-card>
+            <v-card-title style="background: blue;"><v-icon>mdi-message-alert</v-icon>Laporan Terbaru</v-card-title>
             <v-data-table
+              style="background: #d4d4d4;"
               dense
               :headers="headers"
               :hide-default-header="true"
@@ -85,11 +85,12 @@
               class="elevation-1"
             ></v-data-table>
           </v-card>
-        </v-flex>
-        <v-flex style="flex-grow: 2;">
-          <v-card class="ml-1">
-            <v-card-title style="flex-shrink: 2; background: blue;"><v-icon>mdi-message-processing</v-icon>Laporan Sedang Diproses</v-card-title>
+        </div>
+        <div class="table-container">
+          <v-card>
+            <v-card-title style="background: blue;"><v-icon>mdi-message-processing</v-icon>Laporan Sedang Diproses</v-card-title>
             <v-data-table
+              style="background: #d4d4d4;"
               dense
               :headers="headers"
               :hide-default-header="true"
@@ -99,8 +100,8 @@
               class="elevation-1"
             ></v-data-table>
           </v-card>
-        </v-flex>
-      </v-layout>
+        </div>
+      </div>
     </v-container>
 
   </div>
@@ -184,3 +185,19 @@ export default {
 }
 
 </script>
+
+<style>
+@media screen and (max-width:2000px){
+    .table-container {
+      width: 49%;
+      margin-top: 10px; 
+    }
+}
+
+@media screen and (max-width:958px){
+    .table-container {
+      width: 100%;
+      margin-top: 10px; 
+    }
+}
+</style>
