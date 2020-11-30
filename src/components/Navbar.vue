@@ -68,9 +68,9 @@ export default {
       drawer: false,
       menu: [
         { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
-        { title: 'Buat Laporan', icon: 'mdi-image', route: '/buat-laporan' },
-        { title: 'Laporan Saya', icon: 'mdi-help-box', route: '/laporan-saya' },
-        { title: 'Lihat Laporan', icon: 'mdi-help-box', route: '/lihat-laporan' },
+        { title: 'Buat Laporan', icon: 'mdi-file-plus', route: '/buat-laporan' },
+        { title: 'Laporan Saya', icon: 'mdi-file-account', route: '/laporan-saya' },
+        { title: 'Lihat Laporan', icon: 'mdi-file-find', route: '/lihat-laporan' },
       ],
       items: [
         { menu_name: 'Profil', icon: 'mdi-account-settings' },
