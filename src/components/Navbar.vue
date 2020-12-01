@@ -1,11 +1,14 @@
 <template>
   <div>
     <v-app-bar
-      color="deep-purple accent-4"
-      dark
+      color="#3895ff"
       fixed
     >
       <v-app-bar-nav-icon @click.stop="drawer = !drawer"></v-app-bar-nav-icon>
+      <!-- <v-img :src="require('../assets/logo_kesbangpol.png')" style="width: 5px; height: 5px;"></v-img> -->
+      <v-toolbar-side-icon>
+        <v-img class="mr-3" src="@/assets/logo_kabupatentangerang.png" contain alt="" height="45px" width="45px" ></v-img>
+      </v-toolbar-side-icon>
 
       <v-toolbar-title>Sistem Aplikasi Pelaporan</v-toolbar-title>
 
@@ -40,10 +43,11 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-      <v-navigation-drawer  v-model="drawer" dark app class="red darken-4 sidebar">
+      <v-navigation-drawer  v-model="drawer" app class="grey sidebar">
         <v-layout column align-center>
           <v-flex class="mt-5"> 
-            <p class="white--text subheading mt-1 text-center">Menu</p>
+            <v-img src="@/assets/logo_kesbangpol.png" contain alt="" height="200px" width="200px" ></v-img>
+            <p class="black--text subheading mt-1 text-center">Menu</p>
           </v-flex>
         </v-layout>
         <v-list flat>
