@@ -31,12 +31,14 @@
               >
                 <template v-slot:activator="{ on, attrs }">
                   <v-text-field
+                    placeholder="Tanggal"
+                    solo
                     v-model="dateRangeText"
                     prepend-icon="mdi-calendar"
                     readonly
                     v-bind="attrs"
                     v-on="on"
-                    style="width:240px;"
+                    style="width:250px;"
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="dates" scrollable range>
@@ -59,9 +61,9 @@
         <div style="flex-direction: row; flex-wrap: wrap; display: flex;">
           <v-flex v-for="category in categories" :key="category.count_report" >
             <v-card class="text-center ma-3" router :to="category.route" style="text-decoration: none;">
-              <div><v-icon x-large :color="category.color">mdi-send mdi-rotate-315</v-icon></div>
+              <div><v-icon size="80" :color="category.color">mdi-send mdi-rotate-315</v-icon></div>
               <v-card-text>
-                <h5 style="color: black; font-weight: bold;">{{category.count_report}}</h5>
+                <h5 style="color: black; font-weight: bold; font-size: 35px">{{category.count_report}}</h5>
                 <h5 style="color: black; font-weight: 300;">{{category.category}}</h5>
               </v-card-text>
             </v-card>
@@ -82,7 +84,7 @@
               item-key="name"
             ><router-link to="/lihat-laporan"></router-link></v-data-table>
             <v-card-actions>
-              <v-btn text color="primary" right="true" :to="tableData.route">Selengkapnya ...</v-btn>
+              <v-btn text color="primary" style="text-transform: none;" :to="tableData.route">Selengkapnya ...</v-btn>
             </v-card-actions>
         </div>
       </div>
