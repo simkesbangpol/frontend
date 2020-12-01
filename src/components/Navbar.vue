@@ -10,7 +10,7 @@
         <v-img class="mr-3" src="@/assets/logo_kabupatentangerang.png" contain alt="" height="45px" width="45px" ></v-img>
       </v-toolbar-side-icon>
 
-      <v-toolbar-title>Sistem Aplikasi Pelaporan</v-toolbar-title>
+      <v-toolbar-title style="font-size: 30px; font-weight: bold;">Sistem Aplikasi Pelaporan</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
@@ -43,22 +43,26 @@
         </v-list>
       </v-menu>
     </v-app-bar>
-      <v-navigation-drawer  v-model="drawer" app class="grey sidebar">
+      <v-navigation-drawer  v-model="drawer" app dark class="sidebar">
         <v-layout column align-center>
           <v-flex class="mt-5"> 
             <v-img src="@/assets/logo_kesbangpol.png" contain alt="" height="200px" width="200px" ></v-img>
-            <p class="black--text subheading mt-1 text-center">Menu</p>
+            <p class="white--text subheading mt-1 text-center" style="font-size: 35px; font-weight: 500;">Menu</p>
           </v-flex>
         </v-layout>
-        <v-list flat>
-          <v-list-item v-for="link in menu"  :key="link.text" router :to="link.route" active-class="border">
-            <v-list-item-action>
-              <v-icon >{{link.icon}}</v-icon>
-            </v-list-item-action>
-            <v-list-item-content >
-              <v-list-item-title >{{link.title}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
+        <v-list dense v-model="selectedItem">
+          <v-list-item-group
+            v-model="selectedItem"
+          >
+            <v-list-item v-for="link in menu" :key="link.text" :to="link.route" mandatory active-class="border" style="color: blue; text-decoration: none; border: .2px solid black; background: white;">
+              <v-list-item-action>
+                <v-icon class="black--text">{{link.icon}}</v-icon>
+              </v-list-item-action>
+              <v-list-item-content >
+                <v-list-item-title class="black--text">{{link.title}}</v-list-item-title>
+              </v-list-item-content>
+            </v-list-item>
+          </v-list-item-group>
         </v-list>
       </v-navigation-drawer>
   </div>
@@ -69,6 +73,7 @@ export default {
     name:"Navbar",
   data() {
     return {
+      selectedItem: 1,
       drawer: false,
       menu: [
         { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
@@ -94,7 +99,7 @@ export default {
 
 @media screen and (max-width:958px){
     .sidebar {
-      margin-top: 56px;
+      margin-top: 0px;
     }
 }
 </style>
