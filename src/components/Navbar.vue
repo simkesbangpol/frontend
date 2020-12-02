@@ -80,6 +80,7 @@ export default {
         { title: 'Buat Laporan', icon: 'mdi-file-plus', route: '/buat-laporan' },
         { title: 'Laporan Saya', icon: 'mdi-file-account', route: '/laporan-saya' },
         { title: 'Lihat Laporan', icon: 'mdi-file-find', route: '/lihat-laporan' },
+        { title: 'Kelola Akun', icon: 'mdi-account-search', route: '/kelola-akun' },
       ],
       items: [
         { menu_name: 'Profil', icon: 'mdi-account-settings' },
