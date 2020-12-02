@@ -8,6 +8,7 @@
 
       <v-row class="ml-1">
         <v-select
+          prepend-icon="mdi-email-variant"
           label="Kategori Laporan"
           v-model="select"
           :items="items"
@@ -16,7 +17,7 @@
         ></v-select>
       </v-row>
       <v-row class="ml-1">
-        <v-text-field label="Fakta" outlined></v-text-field>
+        <v-text-field prepend-icon="mdi-comma" label="Fakta" outlined></v-text-field>
       </v-row>
       <v-row class="ml-1">
         <v-menu
@@ -32,7 +33,7 @@
               label="Tanggal Kejadian"
               outlined
               v-model="date"
-              append-icon="mdi-calendar"
+              prepend-icon="mdi-calendar"
               readonly
               v-bind="attrs"
               v-on="on"
@@ -45,20 +46,21 @@
         </v-menu>
       </v-row>
       <v-row class="ml-1">
-        <div style="display: flex; width: 100%">
-          <v-text-field label="Wilayah Kejadian" style="width: 40%" class="mr-2" outlined></v-text-field>
+        <!-- <div style="display: flex; width: 100%; flex-direction: column; justify-content: space-between;"> -->
+          <v-text-field prepend-icon="mdi-map-marker" label="Wilayah Kejadian" style="width: 100%" outlined></v-text-field>
           <v-select
-            style="width: 30%"
+            prepend-icon="mdi-blank"
+            style="margin-bottom: 30px;"
             label="Kecamatan"
             outlined
-            class="mr-2"
             v-model="e1"
             :items="states"
             menu-props="auto"
             hide-details
           ></v-select>
           <v-select
-            style="width: 30%" 
+            prepend-icon="mdi-blank"
+            style="margin-bottom: 30px;"
             label="Kelurahan"
             outlined
             v-model="e2"
@@ -66,16 +68,47 @@
             menu-props="auto"
             hide-details
           ></v-select>
-        </div>
+        <!-- </div> -->
       </v-row>
       <v-row class="ml-1">
-        <v-textarea label="Uraian Kejadian" outlined></v-textarea>
+        <v-textarea prepend-icon="mdi-pencil" label="Uraian Kejadian" outlined></v-textarea>
       </v-row>
       <v-row class="ml-1">
-          <v-text-field label="Tindakan" outlined></v-text-field>
+          <v-text-field prepend-icon="mdi-alarm-light" label="Tindakan" outlined></v-text-field>
       </v-row>
       <v-row class="ml-1">
-        <v-textarea label="Rekomendasi" outlined></v-textarea>
+        <v-textarea prepend-icon="mdi-comment-check" label="Rekomendasi" outlined></v-textarea>
+      </v-row>
+
+      <v-row class="ml-1">
+        <v-file-input
+          v-model="files"
+          counter
+          label="File input"
+          multiple
+          placeholder="Select your files (pdf, jpg, png, etc)"
+          prepend-icon="mdi-paperclip"
+          outlined
+          :show-size="1000"
+        >
+          <template v-slot:selection="{ index, text }">
+            <v-chip
+              v-if="index < 2"
+              dark
+              label
+              small
+            >
+              {{ text }}
+            </v-chip>
+
+            <span
+              v-else-if="index === 2"
+              class="overline grey--text text--darken-3 mx-2"
+            >
+              +{{ files.length - 2 }} File(s)
+            </span>
+          </template>
+        </v-file-input>
       </v-row>
 
       <v-row>
@@ -94,6 +127,7 @@
 
 export default {
   data: () => ({
+      files: [],
       select: null,
       items: [
         'Item 1',
