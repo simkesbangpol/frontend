@@ -5,6 +5,7 @@ import BuatLaporan from '../views/BuatLaporan.vue'
 import LaporanSaya from '../views/LaporanSaya.vue'
 import LihatLaporan from '../views/LihatLaporan.vue'
 import KelolaAkun from '../views/KelolaAkun.vue'
+import DetailLaporan from '../views/DetailLaporan.vue'
 
 Vue.use(VueRouter)
 
@@ -33,6 +34,11 @@ const routes = [
     path: '/kelola-akun',
     name: 'KelolaAkun',
     component: KelolaAkun
+  },
+  {
+    path: '/detail-laporan',
+    name: 'DetailLaporan',
+    component: DetailLaporan
   },
   {
     path: '/about',
