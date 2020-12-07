@@ -13,7 +13,23 @@
         >
           <template v-slot:top>
             <v-row no-gutters class="mr-1 ml-1" align="baseline">
-              <v-col md="9" cols="12"><h2 class="ml-2 subheading black--text">Tabel Data</h2></v-col>
+              <v-col md="7" cols="12"><h2 class="ml-2 subheading black--text">Tabel Data</h2></v-col>
+              <v-col md="1" cols="12">
+                <v-btn color="primary" text @click="{}">
+                  <v-icon left >
+                    mdi-file-export
+                  </v-icon>
+                  Export
+                </v-btn>
+              </v-col>
+              <v-col md="1" cols="12">
+                <v-btn color="primary" text @click="{}">
+                  <v-icon left >
+                    mdi-file-import
+                  </v-icon>
+                  Import
+                </v-btn>
+              </v-col>
               <v-col md="2" cols="12" class="mt-2">
                 <v-text-field
                   dense
