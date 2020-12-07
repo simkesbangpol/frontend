@@ -6,10 +6,16 @@ import LaporanSaya from '../views/LaporanSaya.vue'
 import LihatLaporan from '../views/LihatLaporan.vue'
 import KelolaAkun from '../views/KelolaAkun.vue'
 import DetailLaporan from '../views/DetailLaporan.vue'
+import Login from '../views/Login.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
+  {
+    path: '/login',
+    name: 'Login',
+    component: Login
+  },
   {
     path: '/',
     name: 'Home',
