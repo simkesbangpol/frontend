@@ -22,7 +22,7 @@
                 </v-btn>
               </v-col>
               <v-col md="8" cols="12">
-                <v-btn color="primary" text @click="{}">
+                <v-btn color="primary" text @click="showImportModal=true">
                   <v-icon left >
                     mdi-file-import
                   </v-icon>
@@ -39,7 +39,7 @@
                 ></v-text-field>
               </v-col>
               <v-col md="1" cols="12">
-                <v-btn color="primary" text @click="{}">
+                <v-btn color="primary" text @click="showFilterModal=true">
                   <v-icon left >
                     mdi-filter
                   </v-icon>
@@ -62,6 +62,172 @@
         </v-data-table>
       </v-col>
     </v-row>
+
+    <v-dialog
+      v-model="showFilterModal"
+      persistent
+      max-width="600px"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">Parameter Filter</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <!-- <div style="display: flex;"> -->
+                <v-col cols="12">
+                  <v-dialog
+                    ref="dialog"
+                    v-model="dateModal"
+                    :return-value.sync="date"
+                    persistent
+                    width="290px"
+                  >
+                    <template v-slot:activator="{ on, attrs }">
+                      <v-text-field
+                        label="Rentang Tanggal"
+                        v-model="dateRangeText"
+                        append-outer-icon="mdi-calendar"
+                        readonly
+                        v-bind="attrs"
+                        v-on="on"
+                      ></v-text-field>
+                    </template>
+                    <v-date-picker v-model="dates" scrollable range>
+                      <v-spacer></v-spacer>
+                      <v-btn text color="primary" @click="dates = []" >
+                        Ulang
+                      </v-btn>
+                      <v-btn text color="error" @click="dateModal = false" >
+                        Batal
+                      </v-btn>
+                      <v-btn text color="success" @click="$refs.dialog.save(dates)" >
+                        OK
+                      </v-btn>
+                    </v-date-picker>
+                  </v-dialog>
+                </v-col>
+              <!-- </div> -->
+
+              <v-col
+                cols="12"
+              >
+                <v-select
+                  :items="kategoriList"
+                  label="Kategori"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-select
+                  :items="statusList"
+                  label="Status"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-select
+                  :items="['0-17', '18-29', '30-54', '54+']"
+                  label="Kecamatan"
+                  required
+                ></v-select>
+              </v-col>
+              <v-col
+                cols="12"
+              >
+                <v-select
+                  :items="['0-17', '18-29', '30-54', '54+']"
+                  label="Kelurahan"
+                  required
+                ></v-select>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="red darken-1"
+            text
+            @click="showFilterModal = false"
+          >
+            Tutup
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="showFilterModal = false"
+          >
+            Filter
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
+
+    <v-dialog
+      v-model="showImportModal"
+      persistent
+      max-width="600px"
+    >
+      <v-card>
+        <v-card-title>
+          <span class="headline">Import File</span>
+        </v-card-title>
+        <v-card-text>
+          <v-container>
+            <v-row>
+              <v-col cols="12">
+                <v-file-input
+                  v-model="files"
+                  counter
+                  label="File input"
+                  multiple
+                  placeholder="Select your files (xls, xlsx, etc)"
+                  prepend-icon="mdi-paperclip"
+                  outlined
+                  :show-size="1000"
+                >
+                  <template v-slot:selection="{ index, text }">
+                    <v-chip v-if="index < 2" dark label small >
+                      {{ text }}
+                    </v-chip>
+
+                    <span
+                      v-else-if="index === 2"
+                      class="overline grey--text text--darken-3 mx-2"
+                    >
+                      +{{ files.length - 2 }} File(s)
+                    </span>
+                  </template>
+                </v-file-input>
+              </v-col>
+            </v-row>
+          </v-container>
+        </v-card-text>
+        <v-card-actions>
+          <v-spacer></v-spacer>
+          <v-btn
+            color="red darken-1"
+            text
+            @click="showImportModal = false"
+          >
+            Tutup
+          </v-btn>
+          <v-btn
+            color="blue darken-1"
+            text
+            @click="showImportModal = false"
+          >
+            Import
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -74,6 +240,12 @@ export default {
   },
   data () {
     return {
+      showFilterModal: false,
+      showImportModal: false,
+      dateModal: false,
+      dates: [],
+      statusList: ['Belum diproses', 'Sedang diproses', 'Selesai', 'Ditolak'],
+      kategoriList: ['Ideologi', 'Politik', 'Ekonomi', 'Sosial', 'Budaya'],
       search: '',
       headers: [
         {
@@ -150,6 +322,11 @@ export default {
         },
       ],
     }
+  },
+  computed: {
+    dateRangeText () {
+      return this.dates.join('  ~  ')
+    },
   },
   methods: {
     filterOnlyCapsText (value, search) {
