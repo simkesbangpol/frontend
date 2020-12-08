@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row no-gutters>
         <v-col cols="12">
-            <h1 class="subheading black--text">Detail Laporan Kejadian</h1>
+            <h3 class="subheading black--text"><a @click="navigateToLihatLaporan">Data Laporan Kejadian </a> / Detail Laporan</h3>
         </v-col>
         <v-col cols="12" align-self="baseline">
             <h5 class="subheading black--text"><v-icon>mdi-account</v-icon>Diposting oleh <a>Dinas Pemadam</a></h5>
@@ -68,6 +68,11 @@ export default {
             'Ditolak',
         ],
         selectStatus: 'Belum diproses',
+        }
+    },
+    methods: {
+        navigateToLihatLaporan() {
+            this.$router.push({ path: "/lihat-laporan" });
         }
     },
 }

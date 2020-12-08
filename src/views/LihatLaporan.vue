@@ -13,7 +13,6 @@
         >
           <template v-slot:top>
             <v-row no-gutters class="mr-1 ml-1" align="baseline">
-              <v-col md="7" cols="12"><h2 class="ml-2 subheading black--text">Tabel Data</h2></v-col>
               <v-col md="1" cols="12">
                 <v-btn color="primary" text @click="{}">
                   <v-icon left >
@@ -22,7 +21,7 @@
                   Export
                 </v-btn>
               </v-col>
-              <v-col md="1" cols="12">
+              <v-col md="8" cols="12">
                 <v-btn color="primary" text @click="{}">
                   <v-icon left >
                     mdi-file-import
