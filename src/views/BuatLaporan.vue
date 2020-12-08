@@ -13,7 +13,7 @@
               prepend-icon="mdi-email-variant"
               label="Kategori Laporan"
               v-model="select"
-              :items="items"
+              :items="kategoriList"
               outlined
               :menu-props="{ offsetY: true }"
             ></v-select>
@@ -131,12 +131,7 @@ export default {
   data: () => ({
       files: [],
       select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4',
-      ],
+      kategoriList: ['Ideologi', 'Politik', 'Ekonomi', 'Sosial', 'Budaya'],
       states: [
         'Alabama', 'Alaska', 'American Samoa', 'Arizona',
         'Arkansas', 'California', 'Colorado', 'Connecticut',

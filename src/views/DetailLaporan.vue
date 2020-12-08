@@ -112,12 +112,7 @@ export default {
             {title: "No Telp", desc:"021 78555 544"},
             {title: "Email", desc:"test@wila.yah"},
         ],
-        statusList: [
-            'Belum diproses',
-            'Sedang diproses',
-            'Selesai',
-            'Ditolak',
-        ],
+        statusList: ['Belum diproses', 'Sedang diproses', 'Selesai', 'Ditolak'],
         selectStatus: 'Belum diproses',
         }
     },
