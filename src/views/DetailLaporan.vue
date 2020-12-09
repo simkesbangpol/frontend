@@ -70,6 +70,7 @@
                     </tbody>
                 </template>
             </v-simple-table>
+            <v-btn class="mt-5" outlined color="indigo"><v-icon>mdi-download</v-icon>Unduh File</v-btn>
         </v-col>
     </v-row>
     <v-row no-gutters align="baseline">

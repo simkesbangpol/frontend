@@ -186,7 +186,6 @@
                   v-model="files"
                   counter
                   label="File input"
-                  multiple
                   placeholder="Select your files (xls, xlsx, etc)"
                   prepend-icon="mdi-paperclip"
                   outlined
