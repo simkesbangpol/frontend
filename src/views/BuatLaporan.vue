@@ -82,10 +82,10 @@
 
           <v-row class="ml-1">
             <v-file-input
+              :rules="maxSizeFile"
               v-model="files"
               counter
               label="File input"
-              multiple
               placeholder="Select your files (pdf, jpg, png, etc)"
               prepend-icon="mdi-paperclip"
               outlined
@@ -128,7 +128,10 @@
 // @ is an alias to /src
 
 export default {
-  data: () => ({
+  data: () => ({              
+      maxSizeFile: [
+        value => value.size < 2000000 || 'File size max 2 MB!',
+      ],
       files: [],
       select: null,
       kategoriList: ['Ideologi', 'Politik', 'Ekonomi', 'Sosial', 'Budaya'],
