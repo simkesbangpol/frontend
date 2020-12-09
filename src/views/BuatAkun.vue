@@ -6,7 +6,16 @@
           ref="form"
           @submit.prevent="submit"
         >
-          <h3 class="mb-5"><a @click="navigateToKelolaAkun">Data Akun </a>/ Form Buat Akun</h3>
+          <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+              <template style="background: red;" v-slot:item="{ item }">
+                  <v-breadcrumbs-item
+                      :to="item.to"
+                      :disabled="item.disabled"
+                  >
+                      <h1>{{ item.text }}</h1>
+                  </v-breadcrumbs-item>
+              </template>
+          </v-breadcrumbs>
           
           <v-row class="ml-1">
             <v-text-field prepend-icon="mdi-home-city" label="Nama" outlined></v-text-field>
@@ -70,6 +79,18 @@ export default {
     },
     data () {
         return {
+          breadcrumbsItems: [
+              {
+              text: 'Data Akun',
+              disabled: false,
+              to: '/kelola-akun',
+              },
+              {
+              text: 'Form Buat Akun',
+              disabled: true,
+              to: '#',
+              },
+          ],
         }
     },
     methods: {

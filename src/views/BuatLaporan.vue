@@ -6,7 +6,16 @@
           ref="form"
           @submit.prevent="submit"
         >
-          <h3 class="mb-5">Form Laporan Kejadian</h3>
+          <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+              <template style="background: red;" v-slot:item="{ item }">
+                  <v-breadcrumbs-item
+                      :to="item.to"
+                      :disabled="item.disabled"
+                  >
+                      <h1>{{ item.text }}</h1>
+                  </v-breadcrumbs-item>
+              </template>
+          </v-breadcrumbs>
 
           <v-row class="ml-1">
             <v-select
@@ -157,6 +166,13 @@ export default {
       menu: false,
       modal: false,
       menu2: false,
+      breadcrumbsItems: [
+          {
+          text: 'Form Laporan Kejadian',
+          disabled: true,
+          to: '#',
+          },
+      ],
   }),
   name: 'BuatLaporan',
   components: {

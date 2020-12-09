@@ -43,15 +43,21 @@
       </v-card>
     </v-dialog>
 
-
-    <v-row no-gutters>
+    <v-row>
         <v-col cols="12">
-            <h3 class="subheading black--text"><a @click="navigateToLihatLaporan">Data Laporan Kejadian </a> / Detail Laporan</h3>
+            <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+                <template style="background: red;" v-slot:item="{ item }">
+                    <v-breadcrumbs-item
+                        :to="item.to"
+                        :disabled="item.disabled"
+                    >
+                        <h1>{{ item.text }}</h1>
+                    </v-breadcrumbs-item>
+                </template>
+            </v-breadcrumbs>
         </v-col>
         <v-col cols="12" align-self="baseline">
             <h5 class="subheading black--text"><v-icon>mdi-account</v-icon>Diposting oleh <a @click="showModal = true">Dinas Pemadam</a></h5>
-        </v-col>
-        <v-col cols="12">
             <h5 class="subheading black--text"><v-icon>mdi-calendar-edit</v-icon>14:20, 20 Oktober 2020</h5>
         </v-col>
     </v-row>
@@ -100,21 +106,33 @@ export default {
     },
     data () {
         return {
-        showModal: false,
-        detailReport: [
-            {title: "Kategori", desc:"test kategori"},
-            {title: "Fakta", desc:"test fakta"},
-            {title: "Tanggal Kejadian", desc:"test tgl"},
-            {title: "Wilayah", desc:"test wilayah"},
-        ],
-        dataProfil: [
-            {title: "Nama", desc:"Dinas Pemadam"},
-            {title: "Alamat", desc:"Jl Terusan Buah Batu"},
-            {title: "No Telp", desc:"021 78555 544"},
-            {title: "Email", desc:"test@wila.yah"},
-        ],
-        statusList: ['Belum diproses', 'Sedang diproses', 'Selesai', 'Ditolak'],
-        selectStatus: 'Belum diproses',
+            showModal: false,
+            detailReport: [
+                {title: "Kategori", desc:"test kategori"},
+                {title: "Fakta", desc:"test fakta"},
+                {title: "Tanggal Kejadian", desc:"test tgl"},
+                {title: "Wilayah", desc:"test wilayah"},
+            ],
+            dataProfil: [
+                {title: "Nama", desc:"Dinas Pemadam"},
+                {title: "Alamat", desc:"Jl Terusan Buah Batu"},
+                {title: "No Telp", desc:"021 78555 544"},
+                {title: "Email", desc:"test@wila.yah"},
+            ],
+            statusList: ['Belum diproses', 'Sedang diproses', 'Selesai', 'Ditolak'],
+            selectStatus: 'Belum diproses',
+            breadcrumbsItems: [
+                {
+                text: 'Data Laporan Kejadian',
+                disabled: false,
+                to: '/lihat-laporan',
+                },
+                {
+                text: 'Detail Laporan',
+                disabled: true,
+                to: '#',
+                },
+            ],
         }
     },
     methods: {
