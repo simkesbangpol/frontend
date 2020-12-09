@@ -1,8 +1,18 @@
 <template>
   <v-container fluid>
-    <v-row no-gutters>
+    <v-row>
         <v-col cols="12">
-            <h3 class="subheading black--text"><a @click="navigateToKelolaAkun">Data Akun </a> / Detail Akun</h3>
+            <!-- <h3 class="subheading black--text"><a @click="navigateToKelolaAkun">Data Akun </a> / Detail Akun</h3> -->
+        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+            <template style="background: red;" v-slot:item="{ item }">
+                <v-breadcrumbs-item
+                    :to="item.to"
+                    :disabled="item.disabled"
+                >
+                    <h1>{{ item.text }}</h1>
+                </v-breadcrumbs-item>
+            </template>
+        </v-breadcrumbs>
         </v-col>
     </v-row>
     <v-row>
@@ -48,11 +58,18 @@ export default {
                 {title: "Username", desc:"test Username"},
                 {title: "Password", desc:"test Password"},
             ],
-        }
-    },
-    methods: {
-        navigateToKelolaAkun() {
-            this.$router.push({ path: "/kelola-akun" });
+            breadcrumbsItems: [
+                {
+                text: 'Data Akun',
+                disabled: false,
+                to: '/kelola-akun',
+                },
+                {
+                text: 'Detail Akun',
+                disabled: true,
+                to: '#',
+                },
+            ],
         }
     },
 }

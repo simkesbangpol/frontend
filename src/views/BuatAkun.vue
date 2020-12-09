@@ -93,10 +93,5 @@ export default {
           ],
         }
     },
-    methods: {
-        navigateToKelolaAkun() {
-            this.$router.push({ path: "/kelola-akun" });
-        }
-    },
 }
 </script>
