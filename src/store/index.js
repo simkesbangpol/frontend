@@ -18,6 +18,9 @@ const getDefaultState = () => {
 const stores = {
     state: getDefaultState(),
     getters: {
+        isLoggedIn: state => {
+            return state.user !== null
+        },
         getUserToken: state => {
             return state.token
         },

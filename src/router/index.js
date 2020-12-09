@@ -7,6 +7,7 @@ import LihatLaporan from '../views/LihatLaporan.vue'
 import KelolaAkun from '../views/KelolaAkun.vue'
 import DetailLaporan from '../views/DetailLaporan.vue'
 import Login from '../views/Login.vue'
+import { store } from '@/store'
 
 Vue.use(VueRouter)
 
@@ -60,6 +61,11 @@ const router = new VueRouter({
   mode: 'history',
   base: process.env.BASE_URL,
   routes
+})
+
+router.beforeEach((to, from, next) => {
+    if (to.name !== 'Login' && !store.getters.isLoggedIn) next({ name: 'Login' })
+    else next()
 })
 
 export default router
