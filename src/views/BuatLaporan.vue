@@ -6,14 +6,23 @@
           ref="form"
           @submit.prevent="submit"
         >
-          <h3 class="mb-5">Form Laporan Kejadian</h3>
+          <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+              <template style="background: red;" v-slot:item="{ item }">
+                  <v-breadcrumbs-item
+                      :to="item.to"
+                      :disabled="item.disabled"
+                  >
+                      <h1>{{ item.text }}</h1>
+                  </v-breadcrumbs-item>
+              </template>
+          </v-breadcrumbs>
 
           <v-row class="ml-1">
             <v-select
               prepend-icon="mdi-email-variant"
               label="Kategori Laporan"
               v-model="select"
-              :items="items"
+              :items="kategoriList"
               outlined
               :menu-props="{ offsetY: true }"
             ></v-select>
@@ -82,10 +91,10 @@
 
           <v-row class="ml-1">
             <v-file-input
+              :rules="maxSizeFile"
               v-model="files"
               counter
               label="File input"
-              multiple
               placeholder="Select your files (pdf, jpg, png, etc)"
               prepend-icon="mdi-paperclip"
               outlined
@@ -128,15 +137,13 @@
 // @ is an alias to /src
 
 export default {
-  data: () => ({
+  data: () => ({              
+      maxSizeFile: [
+        value => value.size < 2000000 || 'File size max 2 MB!',
+      ],
       files: [],
       select: null,
-      items: [
-        'Item 1',
-        'Item 2',
-        'Item 3',
-        'Item 4',
-      ],
+      kategoriList: ['Ideologi', 'Politik', 'Ekonomi', 'Sosial', 'Budaya'],
       states: [
         'Alabama', 'Alaska', 'American Samoa', 'Arizona',
         'Arkansas', 'California', 'Colorado', 'Connecticut',
@@ -159,6 +166,13 @@ export default {
       menu: false,
       modal: false,
       menu2: false,
+      breadcrumbsItems: [
+          {
+          text: 'Form Laporan Kejadian',
+          disabled: true,
+          to: '#',
+          },
+      ],
   }),
   name: 'BuatLaporan',
   components: {

@@ -37,7 +37,6 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                      style="width:250px;"
                     ></v-text-field>
                   </template>
                   <v-date-picker v-model="dates" scrollable range>

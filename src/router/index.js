@@ -43,6 +43,16 @@ const routes = [
     component: KelolaAkun
   },
   {
+    path: '/buat-akun',
+    name: 'BuatAkun',
+    component: BuatAkun
+  },
+  {
+    path: '/detail-akun',
+    name: 'DetailAkun',
+    component: DetailAkun
+  },
+  {
     path: '/detail-laporan',
     name: 'DetailLaporan',
     component: DetailLaporan

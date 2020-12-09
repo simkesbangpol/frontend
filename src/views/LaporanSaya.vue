@@ -2,7 +2,16 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <h1 class="subheading black--text">Data Laporan Saya</h1>
+        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+            <template style="background: red;" v-slot:item="{ item }">
+                <v-breadcrumbs-item
+                    :to="item.to"
+                    :disabled="item.disabled"
+                >
+                    <h1>{{ item.text }}</h1>
+                </v-breadcrumbs-item>
+            </template>
+        </v-breadcrumbs>
         <v-data-table
           :headers="headers"
           :items="desserts"
@@ -107,6 +116,13 @@
             tgl_kejadian: 26.0,
             status: 65,
           },
+        ],
+        breadcrumbsItems: [
+            {
+            text: 'Data Laporan Saya',
+            disabled: true,
+            to: '#',
+            },
         ],
       }
     },
