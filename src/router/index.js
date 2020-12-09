@@ -7,6 +7,8 @@ import LihatLaporan from '../views/LihatLaporan.vue'
 import KelolaAkun from '../views/KelolaAkun.vue'
 import DetailLaporan from '../views/DetailLaporan.vue'
 import Login from '../views/Login.vue'
+import BuatAkun from '../views/BuatAkun.vue'
+import DetailAkun from '../views/DetailAkun.vue'
 
 Vue.use(VueRouter)
 
@@ -40,6 +42,16 @@ const routes = [
     path: '/kelola-akun',
     name: 'KelolaAkun',
     component: KelolaAkun
+  },
+  {
+    path: '/buat-akun',
+    name: 'BuatAkun',
+    component: BuatAkun
+  },
+  {
+    path: '/detail-akun',
+    name: 'DetailAkun',
+    component: DetailAkun
   },
   {
     path: '/detail-laporan',
