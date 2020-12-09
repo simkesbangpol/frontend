@@ -135,10 +135,5 @@ export default {
             ],
         }
     },
-    methods: {
-        navigateToLihatLaporan() {
-            this.$router.push({ path: "/lihat-laporan" });
-        }
-    },
 }
 </script>
