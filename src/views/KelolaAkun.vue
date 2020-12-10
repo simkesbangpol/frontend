@@ -14,7 +14,7 @@
         </v-breadcrumbs>
         <v-data-table
           :headers="headers"
-          :items="eventReports"
+          :items="users"
           :items-per-page="5"
           :search="search"
           :custom-filter="filterOnlyCapsText"
@@ -67,6 +67,7 @@
 
 <script>
 // @ is an alias to /src
+import client from '@/axios'
 
 export default {
   name: 'KelolaAkun',
@@ -155,7 +156,20 @@ export default {
           to: '#',
           },
       ],
+      users: []
     }
   },
+  mounted() {
+    this.fetchUsers()
+  },
+  methods: {
+    fetchUsers(){
+      client.get('users').then(response => {
+        if(response.status === 200){
+          this.users = response.data.data
+        }
+      })
+    }
+  }
 }
 </script>

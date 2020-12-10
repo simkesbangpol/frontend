@@ -1,19 +1,17 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
-import axios from 'axios'
+import client from '@/axios'
 import router from '../router'
-// eslint-disable-next-line no-unused-vars
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
-
-const base_url = "http://localhost:8000/";
 
 const stores = {
     state: {
         token: '',
         roles: [],
-        user: null
+        user: null,
+        users: [],
     },
     getters: {
         isLoggedIn: state => {
@@ -30,6 +28,10 @@ const stores = {
         getUserPermissions: state => {
             return state.permissions
         },
+
+        getUsers: state => {
+            return state.users
+        }
     },
     mutations: {
         login(state, data){
@@ -40,16 +42,29 @@ const stores = {
         },
         logout(){
             localStorage.clear();
-        }
+        },
+        getUsers(state, data){
+            state.users = data
+        },
     },
     actions: {
         userLogin({ commit }, payload) {
-            axios.post(base_url+'auth',{
+            client.post('auth',{
                 username: payload.username,
                 password: payload.password
             }).then(response => {
                 if(response.status === 200){
                     commit('login', response.data.data)
+                }
+            })
+        },
+        userLogout({ commit }) {
+            commit('logout')
+        },
+        fetchUsers({ commit }) {
+            client.get('users').then(response => {
+                if(response.status === 200){
+                    commit('getUsers', response.data.data)
                 }
             })
         }
