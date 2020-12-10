@@ -6,13 +6,20 @@ import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
-const stores = {
-    state: {
+const getDefaultState = function() {
+    return {
         token: '',
         roles: [],
         user: null,
         users: [],
-    },
+        report_categories: [],
+        villages: [],
+        districts: []
+    }
+}
+
+const stores = {
+    state: getDefaultState(),
     getters: {
         isLoggedIn: state => {
             return state.user !== null
@@ -31,6 +38,18 @@ const stores = {
 
         getUsers: state => {
             return state.users
+        },
+
+        getReportCategories: state => {
+            return state.report_categories
+        },
+
+        getVillages: state => {
+            return state.villages
+        },
+
+        getDistricts: state => {
+            return state.districts
         }
     },
     mutations: {
@@ -42,10 +61,23 @@ const stores = {
         },
         logout(){
             localStorage.clear();
+            stores.state = getDefaultState();
         },
         getUsers(state, data){
             state.users = data
         },
+
+        getReportCategories (state, data) {
+            state.report_categories = data
+        },
+
+        getVillages(state, data) {
+            state.villages = data
+        },
+
+        getDistricts(state, data) {
+            state.districts = data
+        }
     },
     actions: {
         userLogin({ commit }, payload) {
@@ -65,6 +97,29 @@ const stores = {
             client.get('users').then(response => {
                 if(response.status === 200){
                     commit('getUsers', response.data.data)
+                }
+            })
+        },
+        fetchReportCategories({ commit }) {
+            client.get('report_categories').then(response => {
+                if(response.status === 200){
+                    commit('getReportCategories', response.data.data.data)
+                }
+            })
+        },
+
+        fetchVillages({ commit }, payload){
+            client.get(`districts/${payload.district_id}/villages`).then(response => {
+                if(response.status === 200){
+                    commit('getVillages', response.data.data)
+                }
+            })
+        },
+
+        fetchDistricts({ commit }){
+            client.get(`districts`).then(response => {
+                if(response.status === 200){
+                    commit('getDistricts', response.data.data.data)
                 }
             })
         }
