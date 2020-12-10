@@ -1,20 +1,13 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col>
-        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
-            <template style="background: red;" v-slot:item="{ item }">
-                <v-breadcrumbs-item
-                    :to="item.to"
-                    :disabled="item.disabled"
-                >
-                    <h1>{{ item.text }}</h1>
-                </v-breadcrumbs-item>
-            </template>
-        </v-breadcrumbs>
+      <v-col cols="12">
+        <div class="text-h2">Data Laporan Kejadian</div>
+      </v-col>
+      <v-col cols="12">
         <v-data-table
           :headers="headers"
-          :items="eventReports"
+          :items="reports"
           :items-per-page="5"
           :search="search"
           :custom-filter="filterOnlyCapsText"
@@ -123,8 +116,11 @@
                 cols="12"
               >
                 <v-select
-                  :items="kategoriList"
+                  :items="categories"
                   label="Kategori"
+                  item-text="name"
+                  item-value="id"
+                  v-model="filter.category"
                   required
                 ></v-select>
               </v-col>
@@ -132,8 +128,11 @@
                 cols="12"
               >
                 <v-select
-                  :items="statusList"
+                  :items="statuses"
                   label="Status"
+                  item-value="id"
+                  item-text="text"
+                  v-model="filter.status"
                   required
                 ></v-select>
               </v-col>
@@ -141,8 +140,12 @@
                 cols="12"
               >
                 <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
+                  :items="districts"
                   label="Kecamatan"
+                  item-text="name"
+                  item-value="id"
+                  v-model="filter.district_id"
+                  @change="districtChange"
                   required
                 ></v-select>
               </v-col>
@@ -150,8 +153,13 @@
                 cols="12"
               >
                 <v-select
-                  :items="['0-17', '18-29', '30-54', '54+']"
+                  :items="villages"
                   label="Kelurahan"
+                  :disabled="villages.length === 0"
+                  item-text="name"
+                  item-value="id"
+                  v-model="filter.village_id"
+                  :loading="villageLoading"
                   required
                 ></v-select>
               </v-col>
@@ -240,7 +248,7 @@
 </template>
 
 <script>
-// @ is an alias to /src
+import client from '@/axios'
 
 export default {
   name: 'LihatLaporan',
@@ -252,96 +260,55 @@ export default {
       showImportModal: false,
       dateModal: false,
       dates: [],
-      statusList: ['Belum diproses', 'Sedang diproses', 'Selesai', 'Ditolak'],
-      kategoriList: ['Ideologi', 'Politik', 'Ekonomi', 'Sosial', 'Budaya'],
       search: '',
+      statuses: [
+        {id: 0, text: "Belum diproses"},
+        {id: 1, text: "Sedang diproses"},
+        {id: 2, text: "Selesai"},
+        {id: 3, text: "Ditolak"},
+      ],
       headers: [
         {
           text: 'Kategori',
           align: 'start',
           sortable: false,
-          value: 'name',
+          value: 'category.name',
         },
-        { text: 'Laporan', sortable: false, value: 'laporan' },
-        { text: 'Tanggal Kejadian', sortable: false, value: 'tgl_kejadian' },
+        { text: 'Laporan', sortable: false, value: 'title' },
+        { text: 'Tanggal Kejadian', sortable: false, value: 'date' },
         { text: 'Status', sortable: false, value: 'status' },
         { text: 'Actions', sortable: false, value: 'actions' },
       ],
-      eventReports: [
-        {
-          name: 'Frozen Yogurt',
-          laporan: 159,
-          tgl_kejadian: 6.0,
-          status: 24,
-        },
-        {
-          name: 'Ice cream sandwich',
-          laporan: 237,
-          tgl_kejadian: 9.0,
-          status: 37,
-        },
-        {
-          name: 'Eclair',
-          laporan: 262,
-          tgl_kejadian: 16.0,
-          status: 23,
-        },
-        {
-          name: 'Cupcake',
-          laporan: 305,
-          tgl_kejadian: 3.7,
-          status: 67,
-        },
-        {
-          name: 'Gingerbread',
-          laporan: 356,
-          tgl_kejadian: 16.0,
-          status: 49,
-        },
-        {
-          name: 'Jelly bean',
-          laporan: 375,
-          tgl_kejadian: 0.0,
-          status: 94,
-        },
-        {
-          name: 'Lollipop',
-          laporan: 392,
-          tgl_kejadian: 0.2,
-          status: 98,
-        },
-        {
-          name: 'Honeycomb',
-          laporan: 408,
-          tgl_kejadian: 3.2,
-          status: 87,
-        },
-        {
-          name: 'Donut',
-          laporan: 452,
-          tgl_kejadian: 25.0,
-          status: 51,
-        },
-        {
-          name: 'KitKat',
-          laporan: 518,
-          tgl_kejadian: 26.0,
-          status: 65,
-        },
-      ],
-      breadcrumbsItems: [
-          {
-          text: 'Data Laporan Kejadian',
-          disabled: true,
-          to: '#',
-          },
-      ],
+      reports: [],
+      pagination: {},
+      tableLoading: false,
+      villageLoading: false,
+      filter: {
+        dateStart: '',
+        dateEnd: '',
+        category: 0,
+        status: -1,
+        district_id: null,
+        village_id: null,
+      }
     }
   },
   computed: {
     dateRangeText () {
       return this.dates.join('  ~  ')
     },
+    categories() {
+      return this.$store.getters.getReportCategories
+    },
+    districts() {
+      return this.$store.getters.getDistricts
+    },
+    villages(){
+      return this.$store.getters.getVillages
+    }
+  },
+  mounted() {
+    this.fetchReports()
   },
   methods: {
     filterOnlyCapsText (value, search) {
@@ -350,6 +317,25 @@ export default {
         typeof value === 'string' &&
         value.toString().toLocaleUpperCase().indexOf(search) !== -1
     },
+    fetchReports(){
+      this.tableLoading = true;
+      client.get('reports').then(response => {
+        this.reports = response.data.data.data
+        delete response.data.data.data
+        this.pagination = response.data.data
+        this.tableLoading = false
+      }).catch(() => {
+        this.tableLoading = false
+      })
+    },
+    districtChange(){
+      this.villageLoading = true
+      this.$store.dispatch('fetchVillages', { district_id: this.filter.district_id }).then(() => {
+        this.villageLoading = false
+      }).catch(() => {
+        this.villageLoading = false
+      })
+    }
   },
 }
 </script>
