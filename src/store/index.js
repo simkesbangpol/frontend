@@ -6,8 +6,8 @@ import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
-const stores = {
-    state: {
+const getDefaultState = function() {
+    return {
         token: '',
         roles: [],
         user: null,
@@ -15,7 +15,11 @@ const stores = {
         report_categories: [],
         villages: [],
         districts: []
-    },
+    }
+}
+
+const stores = {
+    state: getDefaultState(),
     getters: {
         isLoggedIn: state => {
             return state.user !== null
@@ -57,6 +61,7 @@ const stores = {
         },
         logout(){
             localStorage.clear();
+            stores.state = getDefaultState();
         },
         getUsers(state, data){
             state.users = data
