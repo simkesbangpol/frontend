@@ -6,6 +6,8 @@ import LaporanSaya from '../views/LaporanSaya.vue'
 import LihatLaporan from '../views/LihatLaporan.vue'
 import KelolaAkun from '../views/KelolaAkun.vue'
 import DetailLaporan from '../views/DetailLaporan.vue'
+import BuatAkun from '../views/BuatAkun.vue'
+import DetailAkun from '../views/DetailAkun.vue'
 import Login from '../views/Login.vue'
 import { store } from '@/store'
 

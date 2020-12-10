@@ -1,22 +1,20 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
 import axios from 'axios'
+import router from '../router'
+// eslint-disable-next-line no-unused-vars
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
 
-const base_url = "http://127.0.0.1:8000/";
-
-const getDefaultState = () => {
-    return {
-        token: '',
-        permissions: [],
-        user: null
-    }
-}
+const base_url = "http://localhost:8000/";
 
 const stores = {
-    state: getDefaultState(),
+    state: {
+        token: '',
+        roles: [],
+        user: null
+    },
     getters: {
         isLoggedIn: state => {
             return state.user !== null
@@ -34,32 +32,31 @@ const stores = {
         },
     },
     mutations: {
-        login(state, payload){
+        login(state, data){
+            state.user = data.user
+            state.token = data.access_token
+            state.roles = data.roles
+            router.push({ name: 'Home' })
+        },
+        logout(){
+            localStorage.clear();
+        }
+    },
+    actions: {
+        userLogin({ commit }, payload) {
             axios.post(base_url+'auth',{
                 username: payload.username,
                 password: payload.password
             }).then(response => {
                 if(response.status === 200){
-                    state.user = response.data.user
-                    state.token = response.data.access_token
-                    state.permissions = response.data.permissions
+                    commit('login', response.data.data)
                 }
             })
-        },
-        logout(state){
-            state.user = null
-            state.token = ''
-            state.permissions = []
-        }
-    },
-    actions: {
-        userLogin({ commit }, payload) {
-            commit('login', payload)
         }
     },
     plugins: [createPersistedState({
-        storage: window.sessionStorage,
-    })]
+        storage: window.localStorage,
+    })],
 }
 
 export const store = new Vuex.Store(stores)
