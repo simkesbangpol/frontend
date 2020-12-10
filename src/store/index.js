@@ -12,6 +12,7 @@ const stores = {
         roles: [],
         user: null,
         users: [],
+        report_categories: []
     },
     getters: {
         isLoggedIn: state => {
@@ -31,6 +32,10 @@ const stores = {
 
         getUsers: state => {
             return state.users
+        },
+
+        getReportCategories: state => {
+            return state.report_categories
         }
     },
     mutations: {
@@ -46,6 +51,10 @@ const stores = {
         getUsers(state, data){
             state.users = data
         },
+
+        getReportCategories (state, data) {
+            state.report_categories = data
+        }
     },
     actions: {
         userLogin({ commit }, payload) {
@@ -65,6 +74,13 @@ const stores = {
             client.get('users').then(response => {
                 if(response.status === 200){
                     commit('getUsers', response.data.data)
+                }
+            })
+        },
+        fetchReportCategories({ commit }) {
+            client.get('report_categories').then(response => {
+                if(response.status === 200){
+                    commit('getReportCategories', response.data.data.data)
                 }
             })
         }
