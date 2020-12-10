@@ -26,7 +26,7 @@
             v-on="on"
           >
             <v-icon left>mdi-account-circle</v-icon>
-            Username
+            {{ user.name }}
             <v-icon right>mdi-dots-vertical</v-icon>
           </v-btn>
         </template>
@@ -71,6 +71,11 @@
 <script>
 export default {
     name:"Navbar",
+  computed: {
+      user() {
+        return this.$store.getters.getUser
+      }
+  },
   data() {
     return {
       selectedItem: 1,
