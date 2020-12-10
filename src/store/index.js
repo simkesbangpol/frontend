@@ -12,7 +12,9 @@ const stores = {
         roles: [],
         user: null,
         users: [],
-        report_categories: []
+        report_categories: [],
+        villages: [],
+        districts: []
     },
     getters: {
         isLoggedIn: state => {
@@ -36,6 +38,14 @@ const stores = {
 
         getReportCategories: state => {
             return state.report_categories
+        },
+
+        getVillages: state => {
+            return state.villages
+        },
+
+        getDistricts: state => {
+            return state.districts
         }
     },
     mutations: {
@@ -54,6 +64,14 @@ const stores = {
 
         getReportCategories (state, data) {
             state.report_categories = data
+        },
+
+        getVillages(state, data) {
+            state.villages = data
+        },
+
+        getDistricts(state, data) {
+            state.districts = data
         }
     },
     actions: {
@@ -81,6 +99,22 @@ const stores = {
             client.get('report_categories').then(response => {
                 if(response.status === 200){
                     commit('getReportCategories', response.data.data.data)
+                }
+            })
+        },
+
+        fetchVillages({ commit }, payload){
+            client.get(`districts/${payload.district_id}/villages`).then(response => {
+                if(response.status === 200){
+                    commit('getVillages', response.data.data)
+                }
+            })
+        },
+
+        fetchDistricts({ commit }){
+            client.get(`districts`).then(response => {
+                if(response.status === 200){
+                    commit('getDistricts', response.data.data.data)
                 }
             })
         }
