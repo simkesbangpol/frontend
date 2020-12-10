@@ -1,32 +1,43 @@
 <template>
-  <v-container class="fill-height" fluid>
-    <v-row align="stretch">
-      <v-col class="d-flex justify-center align-center" style="background: #03adfc;" md="6" cols="12">
-        <v-row class="mr-15 ml-15 d-flex justify-center">
-          <h2 class="text-center">Selamat Datang di Halaman Login Sistem Informasi Pelaporan</h2>
-          <v-img src="@/assets/logo_kabupatentangerang.png" contain alt="" height="95px" width="95px" />
-          <h2 class="text-center">Badan Kesatuan Bangsa dan Politik (Kesbangpol)<br/>Kabupaten Tangerang</h2>
+  <v-container fill-height fluid>
+    <v-row>
+      <v-col cols="12" lg="6" style="background: #03adfc;">
+        <v-row class="fill-height align-content-center">
+          <v-col cols="12">
+            <div class="text-center text-lg-h5 text-h6">Selamat Datang di Halaman Login Sistem Informasi Pelaporan</div>
+          </v-col>
+          <v-col cols="12" lg="6">
+            <v-img class="mx-auto" src="@/assets/logo_kabupatentangerang.png" max-width="95" />
+          </v-col>
+          <v-col cols="12" lg="6">
+            <h2 class="text-center text-lg-left text-lg-h5 text-sm-h6 text-subtitle-1">Badan Kesatuan Bangsa dan Politik (Kesbangpol)<br/>Kabupaten Tangerang</h2>
+          </v-col>
         </v-row>
       </v-col>
-      <v-col class="d-flex justify-center align-center" style="border-style: solid; border-color: #03adfc;" md="6" cols="12">
+      <v-col cols="12" lg="6">
         <v-form
-          style="width: 85%;"
-          ref="form"
-          @submit.prevent="submit"
+            ref="form"
+            @submit.prevent="submit"
         >
-          <h3 class="text-center mb-5"><v-icon left>mdi-lock</v-icon>Login</h3>
-          <v-row class="ml-1">
-            <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined></v-text-field>
-          </v-row>
-          <v-row class="ml-1">
-            <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined></v-text-field>
-          </v-row>
           <v-row>
-            <div style="width: 100%; display: flex; justify-content: center;">
-              <v-btn class="d-flex justify-center align-center" @click="login" color="primary" width="25%">
+            <v-col cols="12">
+              <h3 class="text-center mb-5"><v-icon left>mdi-lock</v-icon>Login</h3>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined></v-text-field>
+            </v-col>
+            <v-col cols="12">
+              <v-btn block type="submit" color="primary">
                 Masuk
               </v-btn>
-            </div>
+            </v-col>
+            <v-row>
+              <div style="width: 100%; display: flex; justify-content: center;">
+              </div>
+            </v-row>
           </v-row>
         </v-form>
       </v-col>
@@ -48,7 +59,7 @@ export default {
     }
   },
   methods: {
-    login(){
+    submit(){
       this.$store.dispatch('userLogin', {username: this.username, password: this.password})
     }
   }
