@@ -50,7 +50,12 @@ const routes = [
     component: BuatAkun
   },
   {
-    path: '/detail-akun',
+    path: '/ubah-akun/:id',
+    name: 'UbahAkun',
+    component: BuatAkun
+  },
+  {
+    path: '/detail-akun/:id',
     name: 'DetailAkun',
     component: DetailAkun
   },
