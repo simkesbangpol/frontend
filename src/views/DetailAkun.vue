@@ -43,6 +43,7 @@
 
 <script>
 // @ is an alias to /src
+import client from '@/axios'
 
 export default {
     name: 'DetailAkun',
@@ -50,14 +51,7 @@ export default {
     },
     data () {
         return {
-            detailAkun: [
-                {title: "Nama", desc:"test Nama"},
-                {title: "Alamat", desc:"test Alamat"},
-                {title: "No Telp", desc:"test Telp"},
-                {title: "Email", desc:"test Email"},
-                {title: "Username", desc:"test Username"},
-                {title: "Password", desc:"test Password"},
-            ],
+            detailAkun: [],
             breadcrumbsItems: [
                 {
                 text: 'Data Akun',
@@ -70,6 +64,27 @@ export default {
                 to: '#',
                 },
             ],
+        }
+    },
+    mounted() {
+        this.fetchUsers()
+    },
+    methods: {
+        fetchUsers(){
+            client.get('users/'+this.$route.params.id)
+            .then(response => {
+                console.log("response.data.data..",response.data.data)
+                if(response.status === 200){
+                    const dataUser = response.data.data
+                    this.detailAkun = [
+                        {title: "Nama", desc: dataUser.name},
+                        {title: "Alamat", desc: dataUser.address+", "+dataUser.village.name+", "+dataUser.district.name},
+                        {title: "No Telp", desc: dataUser.phone_number},
+                        {title: "Email", desc: dataUser.email},
+                        {title: "Role Akses", desc: dataUser.roles[0]},
+                    ]
+                }
+            })
         }
     },
 }
