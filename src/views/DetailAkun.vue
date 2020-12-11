@@ -35,7 +35,7 @@
     <v-row no-gutters align="baseline">
         <v-col cols="11"/>
         <v-col md="1" cols="12">
-            <v-btn color="primary">Ubah</v-btn>
+            <v-btn color="primary" :to="'/ubah-akun/'+idUser">Ubah</v-btn>
         </v-col>
     </v-row>
   </v-container>
@@ -51,6 +51,7 @@ export default {
     },
     data () {
         return {
+            idUser: "",
             detailAkun: [],
             breadcrumbsItems: [
                 {
@@ -75,12 +76,14 @@ export default {
             .then(response => {
                 if(response.status === 200){
                     const dataUser = response.data.data
+                    this.idUser = dataUser.id
                     this.detailAkun = [
                         {title: "Nama", desc: dataUser.name},
                         {title: "Alamat", desc: dataUser.address+", "+dataUser.village.name+", "+dataUser.district.name},
                         {title: "No Telp", desc: dataUser.phone_number},
                         {title: "Email", desc: dataUser.email},
                         {title: "Role Akses", desc: dataUser.roles[0]},
+                        {title: "Username", desc: dataUser.username},
                     ]
                 }
             })

@@ -79,7 +79,7 @@
           <v-row>
             <div style="width: 100%; display: flex; justify-content: flex-end;">
               <v-btn type="submit" color="primary" width="13%" :disabled="!isFormValid">
-                {{this.$route.params.id!==undefined ? "Ubah" : "Simpan"}}
+                {{this.$route.params.id!==undefined ? "Simpan" : "Buat"}}
               </v-btn>
             </div>
           </v-row>
