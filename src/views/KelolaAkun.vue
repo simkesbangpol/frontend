@@ -53,45 +53,44 @@
                 </v-icon>
               </v-btn>
               
-              <v-dialog
-                ref="dialog"
-                v-model="showModalDelete"
-                persistent
-                width="35%"
-              >
-                <template v-slot:activator="{ on, attrs }">
-                  <v-btn v-bind="attrs" v-on="on" color="error" icon>
-                    <v-icon >
-                      mdi-trash-can-outline
-                    </v-icon>
-                  </v-btn>
-                </template>
-
-                <v-card>
-                  <v-card-title>
-                    Apakah anda ingin menghapus akun ini ?
-                  </v-card-title>
-                  <v-card-actions>
-                    <v-spacer></v-spacer>
-                    <v-btn
-                      text
-                      @click="showModalDelete = false"
-                    >
-                      Batal
-                    </v-btn>
-                    <v-btn
-                      color="error darken-1"
-                      @click="deleteUser(item)"
-                    >
-                      Hapus
-                    </v-btn>
-                  </v-card-actions>
-                </v-card>
-              </v-dialog>
+              <v-btn @click="onClickDelete(item)" color="error" icon>
+                <v-icon >
+                  mdi-trash-can-outline
+                </v-icon>
+              </v-btn>
             </v-row>
           </template>
         </v-data-table>
       </v-col>
+      
+      <v-dialog
+        ref="dialog"
+        v-model="showModalDelete"
+        persistent
+        width="35%"
+      >
+
+        <v-card>
+          <v-card-title>
+            Apakah anda ingin menghapus akun ini ?
+          </v-card-title>
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn
+              text
+              @click="showModalDelete = false"
+            >
+              Batal
+            </v-btn>
+            <v-btn
+              color="error darken-1"
+              @click="deleteUser(itemSelected)"
+            >
+              Hapus
+            </v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       
       <v-snackbar
         top
@@ -124,6 +123,7 @@ export default {
   },
   data () {
     return {
+      itemSelected: "",
       dataSnackbar: {
         showSnackbar: false,
         timeoutSnackbar: 2000,
@@ -159,10 +159,18 @@ export default {
     this.fetchUsers()
   },
   methods: {
+    onClickDelete(item) {
+      this.itemSelected=item
+      this.showModalDelete=true
+    },
+
     fetchUsers(){
       client.get('users').then(response => {
         if(response.status === 200){
           this.users = response.data.data
+          if (this.$route.params.dataSnackbar) {
+            this.dataSnackbar = this.$route.params.dataSnackbar
+          }
         }
       })
     },

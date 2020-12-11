@@ -4,7 +4,8 @@
       <v-col>
         <v-form
           ref="form"
-          @submit.prevent="createAccount"
+          v-model="isFormValid"
+          @submit.prevent="onSubmit"
         >
           <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
               <template style="background: red;" v-slot:item="{ item }">
@@ -16,15 +17,13 @@
                   </v-breadcrumbs-item>
               </template>
           </v-breadcrumbs>
-          
           <v-row class="ml-1">
-            <v-text-field prepend-icon="mdi-home-city" label="Nama" outlined v-model="user.name"></v-text-field>
+            <v-text-field prepend-icon="mdi-home-city" label="Nama" outlined v-model="user.name" :rules="fieldRules"></v-text-field>
           </v-row>
           <v-row class="ml-1">
-            <v-text-field prepend-icon="mdi-map-marker" label="Alamat" style="width: 100%" outlined v-model="user.address"></v-text-field>
+            <v-text-field prepend-icon="mdi-map-marker" label="Alamat" style="width: 100%" outlined v-model="user.address" :rules="fieldRules"></v-text-field>
             <v-select
               prepend-icon="mdi-blank"
-              style="margin-bottom: 30px;"
               label="Kecamatan"
               outlined
               v-model="district_id"
@@ -32,13 +31,11 @@
               item-text="name"
               item-value="id"
               @change="fetchVillages"
-              :placeholder="this.$route.params.id!==undefined && this.user.district.name"
               menu-props="auto"
-              hide-details
+              :rules="fieldRules"
             ></v-select>
             <v-select
               prepend-icon="mdi-blank"
-              style="margin-bottom: 30px;"
               label="Kelurahan"
               outlined
               v-model="user.village_id"
@@ -47,44 +44,42 @@
               item-value="id"
               :loading="villageLoading"
               no-data-text="Pilih Kecamatan"
-              :disabled="this.$route.params.id!==undefined ? false : (villages.length === 0)"
-              :placeholder="this.$route.params.id!==undefined && this.user.village.name"
+              :disabled="villages.length === 0"
               menu-props="auto"
-              hide-details
+              :rules="fieldRules"
             ></v-select>
           </v-row>
           <v-row class="ml-1">
-            <v-text-field prepend-icon="mdi-phone-classic" label="No Telp" outlined v-model="user.phone_number"></v-text-field>
+            <v-text-field prepend-icon="mdi-phone-classic" label="No Telp" outlined v-model="user.phone_number" :rules="phoneRules"></v-text-field>
           </v-row>
           <v-row class="ml-1">
-              <v-text-field prepend-icon="mdi-email-plus" label="Email" outlined v-model="user.email"></v-text-field>
+              <v-text-field prepend-icon="mdi-email-plus" label="Email" outlined v-model="user.email" :rules="emailRules"></v-text-field>
           </v-row>
 
-          <v-row class="ml-1" style="margin-top: 90px;">
-            <v-text-field prepend-icon="mdi-account-key" label="Username" outlined v-model="user.username"></v-text-field>
-          </v-row>
-          <v-row class="ml-1">
-            <v-text-field prepend-icon="mdi-key-variant" type="password" label="Password" outlined v-model="user.password"></v-text-field>
-          </v-row>
-          <v-row class="ml-1">
+          <v-row class="ml-1 mt-15">
             <v-select
               prepend-icon="mdi-account-convert"
-              style="margin-bottom: 30px;"
               label="Role Akses"
               outlined
               v-model="user.roles"
               :items="roleList"
               item-text="name"
-              item-value="role"
+              item-value="name"
               menu-props="auto"
-              hide-details
+              :rules="fieldRules"
             ></v-select>
+          </v-row>
+          <v-row class="ml-1">
+            <v-text-field prepend-icon="mdi-account-key" label="Username" outlined v-model="user.username" :rules="fieldRules"></v-text-field>
+          </v-row>
+          <v-row class="ml-1">
+            <v-text-field prepend-icon="mdi-key-variant" type="password" label="Password" outlined v-model="user.password" :rules="this.$route.params.id!==undefined ? true : fieldRules"></v-text-field>
           </v-row>
 
           <v-row>
             <div style="width: 100%; display: flex; justify-content: flex-end;">
-              <v-btn type="submit" color="primary" width="13%">
-                Simpan
+              <v-btn type="submit" color="primary" width="13%" :disabled="!isFormValid">
+                {{this.$route.params.id!==undefined ? "Ubah" : "Simpan"}}
               </v-btn>
             </div>
           </v-row>
@@ -122,6 +117,18 @@ export default {
     },
     data () {
         return {
+          isFormValid: false,
+          phoneRules: [
+            v => !!v || 'Field ini tidak boleh kosong.',
+            v => Number.isInteger(Number(v)) || 'Diisi dengan angka.',
+          ],
+          fieldRules: [
+            v => !!v || 'Field ini tidak boleh kosong.',
+          ],
+          emailRules: [
+            v => !!v || 'Field ini tidak boleh kosong.',
+            v => !v || /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/.test(v) || 'Masukkan e-mail yang valid.'
+          ],
           dataSnackbar: {
             showSnackbar: false,
             timeoutSnackbar: 3000,
@@ -131,9 +138,6 @@ export default {
             colorButton: "",
           },
           roleList: [
-            {name:'Admin', role: 'admin'},
-            {name:'Executive', role: 'pegawai'},
-            {name:'Operational', role: 'user'},
           ],
           user: {
             username: "",
@@ -147,14 +151,14 @@ export default {
           },
           breadcrumbsItems: [
               {
-              text: 'Data Akun',
-              disabled: false,
-              to: '/kelola-akun',
+                text: 'Data Akun',
+                disabled: false,
+                to: '/kelola-akun',
               },
               {
-              text: this.$route.params.id!==undefined || this.$route.params.id!==null ? 'Ubah Data Akun' : 'Form Buat Akun',
-              disabled: true,
-              to: '#',
+                text: this.$route.params.id!==undefined ? 'Ubah Data Akun' : 'Form Buat Akun',
+                disabled: true,
+                to: '#',
               },
           ],
           villageLoading: false,
@@ -173,14 +177,25 @@ export default {
       }
     },
     mounted() {
-      (this.$route.params.id!==undefined || this.$route.params.id!==null) && this.getUserById()
+      this.$route.params.id!==undefined && this.getUserById()
+      this.getRolesData()
     },
     methods: {
+      getRolesData() {
+        client.get('roles')
+        .then(response => {
+          this.roleList = response.data.data
+        })
+      },
+
       getUserById(){
           client.get('users/'+this.$route.params.id)
           .then(response => {
               if(response.status === 200){
                   this.user = response.data.data
+                  this.user.roles = response.data.data.roles[0]
+                  this.district_id = response.data.data.village.district_id
+                  this.fetchVillages()
               }
           })
       },
@@ -203,30 +218,15 @@ export default {
         })
       },
 
-      resetForm(){
-          this.user = {
-            username: "",
-            email: "",
-            name: "",
-            address: "",
-            phone_number: "",
-            password: "",
-            village_id: null,
-            roles:"",
-          }
-      },
-
       createAccount() {
         client.post('users', this.user)
           .then(() => {
-            // if(response.data.status){
-              this.dataSnackbar.showSnackbar = true
-              this.dataSnackbar.message = "Data berhasil tersimpan !"
-              this.dataSnackbar.textButton = "Tutup"
-              this.dataSnackbar.colorSnackbar = "success"
-              this.dataSnackbar.colorButton = "error"
-              this.resetForm()
-            // }
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = "Data baru berhasil tersimpan !"
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "success"
+            this.dataSnackbar.colorButton = "error"
+            this.$router.push({ name: "KelolaAkun", params: {dataSnackbar: this.dataSnackbar} })
           }).catch((err) => {
             this.dataSnackbar.showSnackbar = true
             this.dataSnackbar.message = "Data gagal tersimpan ! "+err
@@ -234,6 +234,27 @@ export default {
             this.dataSnackbar.colorSnackbar = "error"
             this.dataSnackbar.colorButton = "error"
           })
+      },
+
+      updateAccount() {
+        client.put('users/'+this.$route.params.id, this.user)
+          .then(() => {
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = "Data berhasil diperbarui !"
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "success"
+            this.dataSnackbar.colorButton = "error"
+          }).catch((err) => {
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = "Data gagal diperbarui ! "+err
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
+          })
+      },
+
+      onSubmit() {
+        this.$route.params.id!==undefined ? this.updateAccount() : this.createAccount()
       }
     }
 }

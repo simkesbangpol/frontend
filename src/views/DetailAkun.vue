@@ -73,7 +73,6 @@ export default {
         fetchUsers(){
             client.get('users/'+this.$route.params.id)
             .then(response => {
-                console.log("response.data.data..",response.data.data)
                 if(response.status === 200){
                     const dataUser = response.data.data
                     this.detailAkun = [
