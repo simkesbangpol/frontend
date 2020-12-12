@@ -2,7 +2,17 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <div class="text-h2">Form Laporan Kejadian</div>
+        <v-breadcrumbs v-if="this.$route.params.id!==undefined" style="padding: 0;"  large light :items="breadcrumbsItems">
+            <template style="background: red;" v-slot:item="{ item }">
+                <v-breadcrumbs-item
+                    :to="item.to"
+                    :disabled="item.disabled"
+                >
+                    <h1>{{ item.text }}</h1>
+                </v-breadcrumbs-item>
+            </template>
+        </v-breadcrumbs>
+        <div v-else class="text-h2">Form Laporan Kejadian</div>
       </v-col>
       <v-col>
         <v-form
@@ -129,7 +139,7 @@
             </v-col>
             <v-col cols="12">
               <v-btn block type="submit" color="primary" width="13%">
-                Kirim
+                {{this.$route.params.id!==undefined ? "Ubah" : "Kirim"}}
               </v-btn>
             </v-col>
 
@@ -154,7 +164,11 @@ export default {
         return this.$store.getters.getDistricts
     },
     villages() {
+      if (this.district_id!==null) {
         return this.$store.getters.getVillages
+      } else {
+        return []
+      }
     }
   },
   data() {
@@ -177,6 +191,18 @@ export default {
       maxSizeFile: [
         value => value.size < 2000000 || 'File size max 2 MB!',
       ],
+      breadcrumbsItems: [
+          {
+            text: 'Laporan Saya',
+            disabled: false,
+            to: '/laporan-saya',
+          },
+          {
+            text: 'Form Ubah Laporan Saya',
+            disabled: true,
+            to: '#',
+          },
+      ],
       files: [],
       select: null,
       date: new Date().toISOString().substr(0, 10),
@@ -185,17 +211,60 @@ export default {
       menu2: false,
     }
   },
+  mounted(){
+    this.$route.params.id!==undefined && this.getReportById()
+  },
   created(){
     this.$store.dispatch('fetchReportCategories');
     this.$store.dispatch('fetchDistricts');
   },
   methods: {
     submit() {
-      client.post('reports', this.report).then(response => {
-        if(response.data.status){
-          this.resetForm()
-        }
-      })
+      if (this.$route.params.id!==undefined) {
+        client.put('reports/'+this.$route.params.id, this.report).then(response => {
+          if(response.data.status){
+            // this.resetForm()
+          }
+        })
+      } else {
+        client.post('reports', this.report).then(response => {
+          if(response.data.status){
+            this.resetForm()
+          }
+        })
+      }
+    },
+
+    getReportById(){
+        client.get('reports/'+this.$route.params.id)
+        .then(response => {
+            if(response.status === 200){
+                const dataReport = response.data.data
+                this.report.category_id = dataReport.category_id
+                this.report.title = dataReport.title
+                this.report.fact = dataReport.fact
+                this.report.date = dataReport.date
+                this.report.location = dataReport.location
+                this.report.description = dataReport.description
+                this.report.action = dataReport.action
+                this.report.recommendation = dataReport.recommendation
+                this.report.village_id = dataReport.recommendation
+                this.report.user_id = dataReport.user_id
+
+                this.district_id = response.data.data.village_id
+                this.getDistrictIdByVillageId(response.data.data.village_id)
+            }
+        })
+    },
+
+    getDistrictIdByVillageId(villageId){
+        client.get('villages/'+villageId)
+        .then((response) => {
+            if(response.status === 200){
+                this.district_id = response.data.data.district_id
+                this.fetchVillages()
+            }
+        })
     },
 
     resetForm(){
