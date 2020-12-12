@@ -57,9 +57,9 @@
             </v-row>
           </template>
           
-          <template v-slot:item.actions>
+          <template v-slot:item.actions="{ item }">
             <v-row align="center">
-              <v-btn color="primary" to="/detail-laporan" text @click="{}">
+              <v-btn color="primary" :to="`/detail-laporan/${item.id}`" text>
                 <v-icon left >
                   mdi-file-document-outline
                 </v-icon>
@@ -284,7 +284,7 @@ export default {
         },
         { text: 'Laporan', sortable: false, value: 'title' },
         { text: 'Tanggal Kejadian', sortable: false, value: 'date' },
-        { text: 'Status', sortable: false, value: 'status' },
+        { text: 'Status', sortable: false, value: 'parsed_status' },
         { text: 'Actions', sortable: false, value: 'actions' },
       ],
       options: {},
