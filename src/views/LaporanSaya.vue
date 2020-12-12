@@ -12,9 +12,9 @@
           class="elevation-6"
           :loading="tableLoading"
         >
-          <template v-slot:item.actions>
+          <template v-slot:item.actions="{ item }">
             <v-row align="center">
-              <v-btn color="primary" text @click="{}">
+              <v-btn color="primary" text :to="'/ubah-laporan-saya/'+item.id">
                 <v-icon left >
                   mdi-square-edit-outline
                 </v-icon>
