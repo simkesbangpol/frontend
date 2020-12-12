@@ -173,7 +173,11 @@ export default {
         return this.$store.getters.getDistricts
       },
       villages() {
-        return this.$store.getters.getVillages
+        if (this.district_id!==null) {
+          return this.$store.getters.getVillages
+        } else {
+          return []
+        }
       }
     },
     mounted() {
