@@ -65,7 +65,7 @@ const routes = [
     component: DetailAkun
   },
   {
-    path: '/detail-laporan',
+    path: '/detail-laporan/:id',
     name: 'DetailLaporan',
     component: DetailLaporan
   },

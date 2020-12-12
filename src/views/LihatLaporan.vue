@@ -8,9 +8,15 @@
         <v-data-table
           :headers="headers"
           :items="reports"
-          :items-per-page="5"
+          :items-per-page="perPage"
           :search="search"
-          :custom-filter="filterOnlyCapsText"
+          :custom-filter="searchReport"
+          :options.sync="options"
+          :loading="tableLoading"
+          :server-items-length="totalItems"
+          :footer-props="{
+            itemsPerPageOptions: [5, 10, 15]
+          }"
           class="elevation-6"
         >
           <template v-slot:top>
@@ -37,7 +43,7 @@
                   outlined
                   append-icon="mdi-table-search"
                   v-model="search"
-                  label="Search"
+                  label="Cari (minimal 4 karakter)"
                 ></v-text-field>
               </v-col>
               <v-col md="1" cols="12">
@@ -51,9 +57,9 @@
             </v-row>
           </template>
           
-          <template v-slot:item.actions>
+          <template v-slot:item.actions="{ item }">
             <v-row align="center">
-              <v-btn color="primary" to="/detail-laporan" text @click="{}">
+              <v-btn color="primary" :to="`/detail-laporan/${item.id}`" text>
                 <v-icon left >
                   mdi-file-document-outline
                 </v-icon>
@@ -67,7 +73,6 @@
 
     <v-dialog
       v-model="showFilterModal"
-      persistent
       max-width="600px"
     >
       <v-card>
@@ -96,7 +101,7 @@
                         v-on="on"
                       ></v-text-field>
                     </template>
-                    <v-date-picker v-model="dates" scrollable range>
+                    <v-date-picker v-model="dates" scrollable range :min="getMinDate()">
                       <v-spacer></v-spacer>
                       <v-btn text color="primary" @click="dates = []" >
                         Ulang
@@ -120,7 +125,7 @@
                   label="Kategori"
                   item-text="name"
                   item-value="id"
-                  v-model="filter.category"
+                  v-model="filter.category_id"
                   required
                 ></v-select>
               </v-col>
@@ -171,14 +176,14 @@
           <v-btn
             color="red darken-1"
             text
-            @click="showFilterModal = false"
+            @click="resetFilter"
           >
-            Tutup
+            Reset
           </v-btn>
           <v-btn
             color="blue darken-1"
             text
-            @click="showFilterModal = false"
+            @click="doFilter"
           >
             Filter
           </v-btn>
@@ -259,8 +264,11 @@ export default {
       showFilterModal: false,
       showImportModal: false,
       dateModal: false,
+      isFiltered: false,
+      isSearching: false,
       dates: [],
       search: '',
+      awaitingSearch: false,
       statuses: [
         {id: 0, text: "Belum diproses"},
         {id: 1, text: "Sedang diproses"},
@@ -276,21 +284,25 @@ export default {
         },
         { text: 'Laporan', sortable: false, value: 'title' },
         { text: 'Tanggal Kejadian', sortable: false, value: 'date' },
-        { text: 'Status', sortable: false, value: 'status' },
+        { text: 'Status', sortable: false, value: 'parsed_status' },
         { text: 'Actions', sortable: false, value: 'actions' },
       ],
+      options: {},
+      perPage: 15,
+      totalItems: -1,
       reports: [],
       pagination: {},
       tableLoading: false,
       villageLoading: false,
       filter: {
-        dateStart: '',
-        dateEnd: '',
-        category: 0,
-        status: -1,
-        district_id: null,
+        date_start: null,
+        date_end: null,
+        category_id: null,
+        status: null,
         village_id: null,
-      }
+      },
+      files: [],
+      date: ''
     }
   },
   computed: {
@@ -307,20 +319,74 @@ export default {
       return this.$store.getters.getVillages
     }
   },
+  watch: {
+    options: {
+      handler() {
+        this.fetchReports()
+      }
+    },
+    search: {
+      handler() {
+        this.searchReport()
+      }
+    }
+  },
   mounted() {
     this.fetchReports()
   },
   methods: {
-    filterOnlyCapsText (value, search) {
-      return value != null &&
-        search != null &&
-        typeof value === 'string' &&
-        value.toString().toLocaleUpperCase().indexOf(search) !== -1
+    doFilter(){
+      this.filter.date_start = this.dates[0]
+      this.filter.date_end = this.dates[1]
+      this.isFiltered = true
+      this.showFilterModal = false
+      this.fetchReports()
+    },
+    resetFilter(){
+      this.filter = {
+        date_start: null,
+        date_end: null,
+        category_id: null,
+        status: null,
+        village_id: null,
+      }
+      this.isFiltered = false
+      this.showFilterModal = false
+      this.fetchReports()
+    },
+    searchReport(){
+      if(!this.awaitingSearch ){
+        setTimeout(() => {
+          this.isSearching = this.search.length > 3
+          if(this.search.length > 3){
+            this.fetchReports()
+          } else if(this.search.length === 0){
+            this.fetchReports()
+          }
+          this.awaitingSearch = false
+        }, 1500)
+      }
+      this.awaitingSearch = true
+    },
+    getMinDate(){
+      if(this.dates.length === 2)
+        return ''
+      else
+        return this.dates[0]
     },
     fetchReports(){
       this.tableLoading = true;
-      client.get('reports').then(response => {
+      const { page, itemsPerPage } = this.options
+      client.get('reports', {
+        params: {
+          page: page,
+          perPage: itemsPerPage,
+          ...(this.isFiltered ? this.filter : {}),
+          ...(this.isSearching ? { search: this.search } : {})
+        }
+      }).then(response => {
         this.reports = response.data.data.data
+        this.totalItems = response.data.data.total
         delete response.data.data.data
         this.pagination = response.data.data
         this.tableLoading = false
