@@ -9,8 +9,6 @@ client.interceptors.response.use(function (response) {
     if (error.response.status === 401) {
         store.dispatch('userLogout')
         router.push({name: 'Login'})
-        localStorage.clear();
-        console.info('auth token expired')
     } else if (error.response.status === 403) {
         router.push({name: 'Login'})
     } else {

@@ -22,7 +22,7 @@ const stores = {
     state: getDefaultState(),
     getters: {
         isLoggedIn: state => {
-            return state.user !== null
+            return state.token !== ''
         },
         getUserToken: state => {
             return state.token
@@ -59,9 +59,9 @@ const stores = {
             state.roles = data.roles
             router.push({ name: 'Home' })
         },
-        logout(){
+        logout(state){
             localStorage.clear();
-            stores.state = getDefaultState();
+            state.token = '';
         },
         getUsers(state, data){
             state.users = data
