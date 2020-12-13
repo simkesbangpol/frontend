@@ -146,6 +146,24 @@
           </v-row>
         </v-form>
       </v-col>
+
+      <v-snackbar
+        top
+        :color="dataSnackbar.colorSnackbar"
+        v-model="dataSnackbar.showSnackbar"
+        :timeout="dataSnackbar.timeoutSnackbar"
+      >
+        {{dataSnackbar.message}}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            :color="dataSnackbar.colorButton"
+            v-bind="attrs"
+            @click="dataSnackbar.showSnackbar = false"
+          >
+            {{dataSnackbar.textButton}}
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
   </v-container>
 </template>
@@ -191,6 +209,14 @@ export default {
       maxSizeFile: [
         value => value.size < 2000000 || 'File size max 2 MB!',
       ],
+      dataSnackbar: {
+        showSnackbar: false,
+        timeoutSnackbar: 3000,
+        message: "",
+        textButton: "",
+        colorSnackbar: "",
+        colorButton: "",
+      },
       breadcrumbsItems: [
           {
             text: 'Laporan Saya',
@@ -221,10 +247,29 @@ export default {
   methods: {
     submit() {
       if (this.$route.params.id!==undefined) {
-        client.put('reports/'+this.$route.params.id, this.report).then(response => {
+        client.put('reports/'+this.$route.params.id, this.report)
+        .then((response) => {
           if(response.data.status){
-            // this.resetForm()
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = "Data berhasil diperbarui !"
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "success"
+            this.dataSnackbar.colorButton = "error"
+            this.$router.push({ name: "LaporanSaya", params: {dataSnackbar: this.dataSnackbar} })
+          } else {
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = "Data gagal diperbarui ! "
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
           }
+        })
+        .catch((err) => {
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = "Data gagal diperbarui ! "+err
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
         })
       } else {
         client.post('reports', this.report).then(response => {
@@ -239,6 +284,7 @@ export default {
         client.get('reports/'+this.$route.params.id)
         .then(response => {
             if(response.status === 200){
+                // this.report = response.data.data
                 const dataReport = response.data.data
                 this.report.category_id = dataReport.category_id
                 this.report.title = dataReport.title
@@ -248,7 +294,7 @@ export default {
                 this.report.description = dataReport.description
                 this.report.action = dataReport.action
                 this.report.recommendation = dataReport.recommendation
-                this.report.village_id = dataReport.recommendation
+                this.report.village_id = dataReport.village_id
                 this.report.user_id = dataReport.user_id
 
                 this.district_id = response.data.data.village_id

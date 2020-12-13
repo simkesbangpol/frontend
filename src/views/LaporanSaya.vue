@@ -24,6 +24,24 @@
           </template>
         </v-data-table>
       </v-col>
+
+      <v-snackbar
+        top
+        :color="dataSnackbar.colorSnackbar"
+        v-model="dataSnackbar.showSnackbar"
+        :timeout="dataSnackbar.timeoutSnackbar"
+      >
+        {{dataSnackbar.message}}
+        <template v-slot:action="{ attrs }">
+          <v-btn
+            :color="dataSnackbar.colorButton"
+            v-bind="attrs"
+            @click="dataSnackbar.showSnackbar = false"
+          >
+            {{dataSnackbar.textButton}}
+          </v-btn>
+        </template>
+      </v-snackbar>
     </v-row>
   </v-container>
 </template>
@@ -52,6 +70,14 @@ import client from '@/axios'
         reports: [],
         pagination: {},
         tableLoading: false,
+        dataSnackbar: {
+          showSnackbar: false,
+          timeoutSnackbar: 3000,
+          message: "",
+          textButton: "",
+          colorSnackbar: "",
+          colorButton: "",
+        },
       }
     },
     mounted() {
@@ -61,6 +87,7 @@ import client from '@/axios'
       fetchUserReports(){
         this.tableLoading = true;
         client.get('auth/reports').then(response => {
+          if (this.$route.params.dataSnackbar) this.dataSnackbar=this.$route.params.dataSnackbar
           this.reports = response.data.data.data
           delete response.data.data.data
           this.pagination = response.data.data
