@@ -217,18 +217,35 @@ export default {
         colorSnackbar: "",
         colorButton: "",
       },
-      breadcrumbsItems: [
-          {
-            text: 'Laporan Saya',
-            disabled: false,
-            to: '/laporan-saya',
-          },
-          {
-            text: 'Form Ubah Laporan Saya',
-            disabled: true,
-            to: '#',
-          },
-      ],
+      breadcrumbsItems: this.$route.name===`UbahLaporan` ?
+        [
+            {
+              text: 'Data Laporan Kejadian',
+              disabled: false,
+              to: '/lihat-laporan',
+              name: 'LihatLaporan',
+            },
+            {
+              text: 'Form Ubah Laporan',
+              disabled: true,
+              to: '#',
+              name: '',
+            },
+        ] :
+        [
+            {
+              text: 'Laporan Saya',
+              disabled: false,
+              to: '/laporan-saya',
+              name: 'LaporanSaya',
+            },
+            {
+              text: 'Form Ubah Laporan Saya',
+              disabled: true,
+              to: '#',
+              name: '',
+            },
+        ],
       files: [],
       select: null,
       date: new Date().toISOString().substr(0, 10),
@@ -255,7 +272,7 @@ export default {
             this.dataSnackbar.textButton = "Tutup"
             this.dataSnackbar.colorSnackbar = "success"
             this.dataSnackbar.colorButton = "error"
-            this.$router.push({ name: "LaporanSaya", params: {dataSnackbar: this.dataSnackbar} })
+            this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
           } else {
             this.dataSnackbar.showSnackbar = true
             this.dataSnackbar.message = "Data gagal diperbarui ! "
