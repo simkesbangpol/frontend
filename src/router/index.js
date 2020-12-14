@@ -45,6 +45,11 @@ const routes = [
     component: LihatLaporan
   },
   {
+    path: '/detail-laporan/:id',
+    name: 'DetailLaporan',
+    component: DetailLaporan
+  },
+  {
     path: '/kelola-akun',
     name: 'KelolaAkun',
     component: KelolaAkun
@@ -64,19 +69,6 @@ const routes = [
     name: 'DetailAkun',
     component: DetailAkun
   },
-  {
-    path: '/detail-laporan/:id',
-    name: 'DetailLaporan',
-    component: DetailLaporan
-  },
-  {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
-  }
 ]
 
 const router = new VueRouter({
@@ -88,6 +80,23 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
     if (to.name !== 'Login' && !store.getters.isLoggedIn) next({ name: 'Login' })
     else next()
+    
+    switch(to.name) {
+      case 'KelolaAkun':
+      case 'BuatAkun':
+      case 'UbahAkun':
+      case 'DetailAkun':
+        if (store.getters.getRoles[0]!=='admin') next({ name: 'Home' })
+        else next()
+        break
+      case 'LihatLaporan':
+      case 'DetailLaporan':
+        if (store.getters.getRoles[0]==='user') next({ name: 'Home' })
+        else next()
+        break
+      default:
+        break
+    }
 })
 
 export default router
