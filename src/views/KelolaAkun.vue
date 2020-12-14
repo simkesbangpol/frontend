@@ -156,6 +156,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.params.dataSnackbar) {
+      this.dataSnackbar = this.$route.params.dataSnackbar
+    }
     this.fetchUsers()
   },
   methods: {
@@ -168,9 +171,6 @@ export default {
       client.get('users').then(response => {
         if(response.status === 200){
           this.users = response.data.data
-          if (this.$route.params.dataSnackbar) {
-            this.dataSnackbar = this.$route.params.dataSnackbar
-          }
         }
       })
     },

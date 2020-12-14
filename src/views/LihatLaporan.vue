@@ -293,6 +293,24 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <v-snackbar
+      top
+      :color="dataSnackbar.colorSnackbar"
+      v-model="dataSnackbar.showSnackbar"
+      :timeout="dataSnackbar.timeoutSnackbar"
+    >
+      {{ dataSnackbar.message }}
+      <template v-slot:action="{ attrs }">
+        <v-btn
+          :color="dataSnackbar.colorButton"
+          v-bind="attrs"
+          @click="()=>{dataSnackbar.showSnackbar = false}"
+        >
+          {{ dataSnackbar.textButton }}
+        </v-btn>
+      </template>
+    </v-snackbar>
   </v-container>
 </template>
 
@@ -305,6 +323,14 @@ export default {
   },
   data () {
     return {
+      dataSnackbar: {
+        showSnackbar: false,
+        timeoutSnackbar: 2000,
+        message: "",
+        textButton: "",
+        colorSnackbar: "",
+        colorButton: "",
+      },
       showModalDelete: false,
       itemSelected: null,
       showFilterModal: false,
@@ -378,6 +404,9 @@ export default {
     }
   },
   mounted() {
+    if (this.$route.params.dataSnackbar) {
+      this.dataSnackbar = this.$route.params.dataSnackbar
+    }
     this.fetchReports()
   },
   methods: {
@@ -391,8 +420,18 @@ export default {
         .then(() => {
           this.fetchReports()
           this.showModalDelete = false
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = "Data berhasil terhapus !"
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "success"
+          this.dataSnackbar.colorButton = "error"
         }).catch(() => {
           this.showModalDelete = false
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = "Data gagal terhapus !"
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
         })
     },
     doFilter(){
