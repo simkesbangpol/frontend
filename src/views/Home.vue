@@ -70,7 +70,7 @@
                 <v-flex v-for="(category, index) in categories" :key="index" >
                   <v-card class="text-center ma-3" router to="/lihat-laporan" style="text-decoration: none;">
                     <div>
-                      <v-icon size="80" :color="category.color">mdi-send mdi-rotate-315</v-icon>
+                      <v-icon size="80" :color="colorSentIcon[index]">mdi-send mdi-rotate-315</v-icon>
                     </div>
                     <v-card-text>
                       <h5 style="color: black; font-weight: bold; font-size: 35px">{{category.unprocessed_count}}</h5>
@@ -118,6 +118,7 @@ export default {
   data() {
     return {
       categories: [],
+      colorSentIcon: ['blue', 'yellow', 'green', 'orange', 'red'],
       latestReports: [],
       onProgressReports: [],
       reports: [],
