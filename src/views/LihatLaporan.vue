@@ -208,7 +208,8 @@
                   v-model="files"
                   counter
                   label="File input"
-                  placeholder="Select your files (xls, xlsx, etc)"
+                  placeholder="Select your files"
+                  accept="application/vnd.ms-excel, application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
                   prepend-icon="mdi-paperclip"
                   outlined
                   :show-size="1000"

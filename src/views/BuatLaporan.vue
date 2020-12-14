@@ -113,7 +113,7 @@
                   v-model="report.file"
                   counter
                   label="File input"
-                  placeholder="Select your files (pdf, jpg, png, etc)"
+                  placeholder="Select your files"
                   prepend-icon="mdi-paperclip"
                   outlined
                   :show-size="1000"
