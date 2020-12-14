@@ -22,7 +22,7 @@
         </v-card>
       </v-col>
       
-      <v-col cols="12">
+      <v-col v-if="this.$store.getters.getRoles[0]!=='user'" cols="12">
         <v-card color="#d4d4d4">
           <v-card-title>
             <v-row>
@@ -83,7 +83,7 @@
         </v-card>
       </v-col>
       
-      <v-col cols="12">
+      <v-col v-if="this.$store.getters.getRoles[0]!=='user'" cols="12">
         <v-row>
           <v-col cols="12" lg="6" v-for="tableData in tables" :key="tableData.title" class="table-container">
             <div style="background: #d4d4d4; border-radius: 5px;" >
