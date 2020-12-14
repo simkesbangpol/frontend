@@ -35,6 +35,11 @@ const routes = [
     component: BuatLaporan
   },
   {
+    path: '/ubah-laporan/:id',
+    name: 'UbahLaporan',
+    component: BuatLaporan
+  },
+  {
     path: '/laporan-saya',
     name: 'LaporanSaya',
     component: LaporanSaya
