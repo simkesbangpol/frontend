@@ -87,13 +87,25 @@ export default {
     return {
       selectedItem: 1,
       drawer: false,
-      menu: [
-        { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
-        { title: 'Buat Laporan', icon: 'mdi-file-plus', route: '/buat-laporan' },
-        { title: 'Laporan Saya', icon: 'mdi-file-account', route: '/laporan-saya' },
-        { title: 'Lihat Laporan', icon: 'mdi-file-find', route: '/lihat-laporan' },
-        { title: 'Kelola Akun', icon: 'mdi-account-search', route: '/kelola-akun' },
-      ],
+      menu: this.$store.getters.getRoles[0]==='admin' ?
+        [
+          { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
+          { title: 'Buat Laporan', icon: 'mdi-file-plus', route: '/buat-laporan' },
+          { title: 'Laporan Saya', icon: 'mdi-file-account', route: '/laporan-saya' },
+          { title: 'Lihat Laporan', icon: 'mdi-file-find', route: '/lihat-laporan' },
+          { title: 'Kelola Akun', icon: 'mdi-account-search', route: '/kelola-akun' },
+        ] : this.$store.getters.getRoles[0]==='pegawai' ?
+        [
+          { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
+          { title: 'Buat Laporan', icon: 'mdi-file-plus', route: '/buat-laporan' },
+          { title: 'Laporan Saya', icon: 'mdi-file-account', route: '/laporan-saya' },
+          { title: 'Lihat Laporan', icon: 'mdi-file-find', route: '/lihat-laporan' },
+        ] :
+        [
+          { title: 'Beranda', icon: 'mdi-view-dashboard', route: '/' },
+          { title: 'Buat Laporan', icon: 'mdi-file-plus', route: '/buat-laporan' },
+          { title: 'Laporan Saya', icon: 'mdi-file-account', route: '/laporan-saya' },
+        ],
       items: [
         { menu_name: 'Profil', icon: 'mdi-account-settings', onClick: {} },
         { menu_name: 'Log Out', icon: 'mdi-logout', onClick: this.onLogout },
