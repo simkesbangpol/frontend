@@ -14,7 +14,8 @@ const getDefaultState = function() {
         users: [],
         report_categories: [],
         villages: [],
-        districts: []
+        districts: [],
+        isLoading: false,
     }
 }
 
@@ -47,6 +48,10 @@ const stores = {
         getVillages: state => {
             return state.villages
         },
+        
+        getLoadings: state => {
+            return state.isLoading
+        },
 
         getDistricts: state => {
             return state.districts
@@ -77,7 +82,11 @@ const stores = {
 
         getDistricts(state, data) {
             state.districts = data
-        }
+        },
+
+        setLoading(state, data) {
+            state.isLoading = data
+        },
     },
     actions: {
         userLogin({ commit }, payload) {
@@ -122,6 +131,10 @@ const stores = {
                     commit('getDistricts', response.data.data.data)
                 }
             })
+        },
+
+        setLoadings({ commit }, payload){
+            commit('setLoading', payload.isLoading)
         }
     },
     plugins: [createPersistedState({
