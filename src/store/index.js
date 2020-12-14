@@ -49,6 +49,10 @@ const stores = {
             return state.villages
         },
         
+        getRoles: state => {
+            return state.roles
+        },
+        
         getLoadings: state => {
             return state.isLoading
         },
