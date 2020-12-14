@@ -45,7 +45,16 @@
 
     <v-row>
       <v-col cols="12">
-        <div class="text-h2">Data Laporan Kejadian</div>
+        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
+            <template style="background: red;" v-slot:item="{ item }">
+                <v-breadcrumbs-item
+                    :to="item.to"
+                    :disabled="item.disabled"
+                >
+                    <h1>{{ item.text }}</h1>
+                </v-breadcrumbs-item>
+            </template>
+        </v-breadcrumbs>
       </v-col>
         <v-col cols="12" align-self="baseline">
             <h5 class="subheading black--text"><v-icon>mdi-account</v-icon>Diposting oleh <a @click="showModal = true">
@@ -102,6 +111,20 @@ export default {
     },
     data () {
         return {
+          breadcrumbsItems: [
+              {
+                text: 'Data Laporan Kejadian',
+                disabled: false,
+                to: '/lihat-laporan',
+                name: 'LihatLaporan',
+              },
+              {
+                text: 'Detail Laporan Kejadian',
+                disabled: true,
+                to: '#',
+                name: '',
+              },
+          ],
           report: {
             status: 0
           },

@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <div class="text-h2">Data Laporan Kejadian</div>
+        <h1>Data Laporan Kejadian</h1>
       </v-col>
       <v-col cols="12">
         <v-data-table

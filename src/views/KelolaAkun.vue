@@ -2,16 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col>
-        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
-            <template style="background: red;" v-slot:item="{ item }">
-                <v-breadcrumbs-item
-                    :to="item.to"
-                    :disabled="item.disabled"
-                >
-                    <h1>{{ item.text }}</h1>
-                </v-breadcrumbs-item>
-            </template>
-        </v-breadcrumbs>
+        <h1>Data Akun</h1>
         <v-data-table
           :headers="headers"
           :items="users"
@@ -145,13 +136,6 @@ export default {
         { text: 'No Telp', sortable: false, value: 'phone_number' },
         { text: 'Aksi', sortable: false, value: 'actions' },
       ],
-      breadcrumbsItems: [
-          {
-          text: 'Data Akun',
-          disabled: true,
-          to: '#',
-          },
-      ],
       users: []
     }
   },
@@ -168,11 +152,14 @@ export default {
     },
 
     fetchUsers(){
-      client.get('users').then(response => {
+      this.$store.dispatch('setLoadings', {isLoading: true})
+      client.get('users')
+      .then(response => {
         if(response.status === 200){
           this.users = response.data.data
         }
       })
+      .finally(() => this.$store.dispatch('setLoadings', {isLoading: false}))
     },
     deleteUser(dataUser) {
       const id = dataUser.id

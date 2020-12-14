@@ -12,7 +12,7 @@
                 </v-breadcrumbs-item>
             </template>
         </v-breadcrumbs>
-        <div v-else class="text-h2">Form Laporan Kejadian</div>
+        <h1 v-else>Form Laporan Kejadian</h1>
       </v-col>
       <v-col>
         <v-form
