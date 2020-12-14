@@ -42,6 +42,13 @@
           </v-list-item>
         </v-list>
       </v-menu>
+      <v-progress-linear
+      :active="this.$store.getters.getLoadings"
+      :indeterminate="this.$store.getters.getLoadings"
+      absolute
+      bottom
+      color="pink lighten-1"
+    ></v-progress-linear>
     </v-app-bar>
       <v-navigation-drawer  v-model="drawer" app dark class="sidebar">
         <v-layout column align-center>
