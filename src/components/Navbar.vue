@@ -35,7 +35,7 @@
           <v-list-item
             v-for="n in items"
             :key="n"
-            @click="() => {}"
+            @click="n.onClick"
           >
             <v-icon left>{{ n.icon }}</v-icon>
             <v-list-item-title>{{ n.menu_name }}</v-list-item-title>
@@ -88,9 +88,15 @@ export default {
         { title: 'Kelola Akun', icon: 'mdi-account-search', route: '/kelola-akun' },
       ],
       items: [
-        { menu_name: 'Profil', icon: 'mdi-account-settings' },
-        { menu_name: 'Log Out', icon: 'mdi-logout' },
+        { menu_name: 'Profil', icon: 'mdi-account-settings', onClick: {} },
+        { menu_name: 'Log Out', icon: 'mdi-logout', onClick: this.onLogout },
       ]
+    }
+  },
+  methods: {
+    onLogout() {
+      this.$store.dispatch('userLogout')
+      this.$router.push({name: 'Login'})
     }
   }
 }
