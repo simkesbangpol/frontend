@@ -6,11 +6,11 @@
           <v-col cols="12">
             <div class="text-center text-lg-h5 text-h6">Selamat Datang di Halaman Login Sistem Informasi Pelaporan</div>
           </v-col>
-          <v-col cols="12" lg="6">
+          <v-col cols="12">
             <v-img class="mx-auto" src="@/assets/logo_kabupatentangerang.png" max-width="95" />
           </v-col>
-          <v-col cols="12" lg="6">
-            <h2 class="text-center text-lg-left text-lg-h5 text-sm-h6 text-subtitle-1">Badan Kesatuan Bangsa dan Politik (Kesbangpol)<br/>Kabupaten Tangerang</h2>
+          <v-col cols="12">
+            <h2 class="text-center text-lg-h5 text-sm-h6 text-subtitle-1">Badan Kesatuan Bangsa dan Politik (Kesbangpol)<br/>Kabupaten Tangerang</h2>
           </v-col>
         </v-row>
       </v-col>
