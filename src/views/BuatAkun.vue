@@ -77,23 +77,7 @@
         </v-form>
       </v-col>
 
-      <v-snackbar
-        top
-        :color="dataSnackbar.colorSnackbar"
-        v-model="dataSnackbar.showSnackbar"
-        :timeout="dataSnackbar.timeoutSnackbar"
-      >
-        {{dataSnackbar.message}}
-        <template v-slot:action="{ attrs }">
-          <v-btn
-            :color="dataSnackbar.colorButton"
-            v-bind="attrs"
-            @click="dataSnackbar.showSnackbar = false"
-          >
-            {{dataSnackbar.textButton}}
-          </v-btn>
-        </template>
-      </v-snackbar>
+      <Snackbar :dataSnackbar='dataSnackbar' />
     </v-row>
   </v-container>
 </template>
@@ -102,11 +86,13 @@
 // @ is an alias to /src
 import client from '@/axios'
 import Breadcrumbs from '../components/Breadcrumbs'
+import Snackbar from '../components/Snackbar'
 
 export default {
     name: 'BuatAkun',
     components: {
-      Breadcrumbs
+      Breadcrumbs,
+      Snackbar
     },
     data () {
         return {
@@ -246,6 +232,7 @@ export default {
             this.dataSnackbar.textButton = "Tutup"
             this.dataSnackbar.colorSnackbar = "success"
             this.dataSnackbar.colorButton = "error"
+            this.$router.push({ name: "KelolaAkun", params: {dataSnackbar: this.dataSnackbar} })
           }).catch((err) => {
             this.dataSnackbar.showSnackbar = true
             this.dataSnackbar.message = "Data gagal diperbarui ! "+err

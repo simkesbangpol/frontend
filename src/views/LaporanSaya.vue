@@ -25,33 +25,19 @@
         </v-data-table>
       </v-col>
 
-      <v-snackbar
-        top
-        :color="dataSnackbar.colorSnackbar"
-        v-model="dataSnackbar.showSnackbar"
-        :timeout="dataSnackbar.timeoutSnackbar"
-      >
-        {{dataSnackbar.message}}
-        <template v-slot:action="{ attrs }">
-          <v-btn
-            :color="dataSnackbar.colorButton"
-            v-bind="attrs"
-            @click="dataSnackbar.showSnackbar = false"
-          >
-            {{dataSnackbar.textButton}}
-          </v-btn>
-        </template>
-      </v-snackbar>
+      <Snackbar :dataSnackbar='dataSnackbar' />
     </v-row>
   </v-container>
 </template>
 
 <script>
 import client from '@/axios'
+import Snackbar from '../components/Snackbar'
 
   export default {
     name: 'LaporanSaya',
     components: {
+      Snackbar,
     },
     data () {
       return {
