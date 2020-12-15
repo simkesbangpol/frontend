@@ -20,8 +20,8 @@
                               v-for="(item, key) in filteredProfile"
                               :key="'profile'+key"
                           >
-                            <td style="background: #e3e3e3; width: 300px; font-weight: bold;">{{ key }}</td>
-                            <td>{{ item }}</td>
+                            <td style="background: #e3e3e3; width: 300px; font-weight: bold;">{{ item.title }}</td>
+                            <td>{{ item.desc }}</td>
                           </tr>
                           </tbody>
                       </template>
@@ -65,8 +65,8 @@
                             v-for="(item, key) in filteredReport"
                             :key="key"
                         >
-                            <td style="background: #e3e3e3; width: 300px; font-weight: bold;">{{ key }}</td>
-                            <td>{{ key === 'category' ? item.name : item }}</td>
+                            <td style="background: #e3e3e3; width: 300px; font-weight: bold;">{{ item.title }}</td>
+                            <td>{{ item.desc }}</td>
                         </tr>
                     </tbody>
                 </template>
@@ -161,19 +161,22 @@ export default {
         })
       },
     getDetailReport(){
-        this.filteredReport = Object.keys(this.report)
-            .filter(key => this.shownReportProps.includes(key))
-            .reduce((obj, key) => {
-              obj[key] = this.report[key];
-              return obj;
-            }, {});
-        console.log("this.report.user..",this.report.user)
-        this.filteredProfile = Object.keys(this.report.user)
-            .filter(key => this.shownUserProps.includes(key))
-            .reduce((obj, key) => {
-              obj[key] = this.report.user[key];
-              return obj;
-            }, {});
+        this.filteredReport = [
+            {title: "Judul", desc: this.report.title},
+            {title: "Kategori Laporan", desc: this.report.category.name},
+            {title: "Fakta", desc: this.report.fact},
+            {title: "Tanggal Kejadian", desc: this.report.date},
+            {title: "Wilayah Kejadian", desc: this.report.location+", "+this.report.village_id},
+            {title: "Tindakan", desc: this.report.action},
+            {title: "Rekomendasi", desc: this.report.recommendation},
+        ]
+        this.filteredProfile = [
+            {title: "Nama", desc: this.report.user.name},
+            {title: "Username", desc: this.report.user.username},
+            {title: "Email", desc: this.report.user.email},
+            {title: "No Telp", desc: this.report.user.phone_number},
+            {title: "Alamat", desc: this.report.user.address+", "+this.report.user.village_id},
+        ]
         this.selectedStatus = this.report.status
     },
     downloadFile(){
