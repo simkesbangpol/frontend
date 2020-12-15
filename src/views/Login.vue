@@ -24,13 +24,16 @@
               <h3 class="text-center mb-5"><v-icon left>mdi-lock</v-icon>Login</h3>
             </v-col>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined></v-text-field>
+              <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess]" />
             </v-col>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined></v-text-field>
+              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess]" />
             </v-col>
             <v-col cols="12">
-              <v-btn block type="submit" color="primary">
+              <h4 class="text-center red--text" v-if="!isLoginSuccess"><strong>Username dan password anda salah !!</strong></h4>
+            </v-col>
+            <v-col cols="12">
+              <v-btn :loading="isLoading" block type="submit" color="primary">
                 Masuk
               </v-btn>
             </v-col>
@@ -41,26 +44,67 @@
           </v-row>
         </v-form>
       </v-col>
+    <Snackbar :dataSnackbar='dataSnackbar' />
     </v-row>
   </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
+import client from '@/axios'
+import Snackbar from '../components/Snackbar'
 
 export default {
   name: 'Login',
   components: {
+    Snackbar,
   },
   data() {
     return {
       username: '',
       password: '',
+      isLoading: false,
+      isLoginSuccess: true,
+      dataSnackbar: {
+        showSnackbar: false,
+        timeoutSnackbar: 2000,
+        message: "",
+        textButton: "",
+        colorSnackbar: "",
+        colorButton: "",
+      },
     }
   },
   methods: {
     submit(){
-      this.$store.dispatch('userLogin', {username: this.username, password: this.password})
+      this.isLoading=true
+      client.post('auth',{
+        username: this.username,
+        password: this.password
+      })
+      .then(response => {
+        this.isLoading=false
+        if(response.status === 200){
+          this.$store.dispatch('userLogin', {response})
+          this.$router.push({ name: 'Home' })
+        } else {
+          this.isLoginSuccess=false
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = "Login gagal !"
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+        }
+      })
+      .catch(()=>{
+        this.isLoginSuccess=false
+        this.isLoading=false
+        this.dataSnackbar.showSnackbar = true
+        this.dataSnackbar.message = "Login gagal !"
+        this.dataSnackbar.textButton = "Tutup"
+        this.dataSnackbar.colorSnackbar = "error"
+        this.dataSnackbar.colorButton = "error"
+      })
     }
   }
 }

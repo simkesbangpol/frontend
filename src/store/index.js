@@ -1,7 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex'
 import client from '@/axios'
-import router from '../router'
 import createPersistedState from "vuex-persistedstate";
 
 Vue.use(Vuex)
@@ -66,7 +65,6 @@ const stores = {
             state.user = data.user
             state.token = data.access_token
             state.roles = data.roles
-            router.push({ name: 'Home' })
         },
         logout(state){
             localStorage.clear();
@@ -94,14 +92,7 @@ const stores = {
     },
     actions: {
         userLogin({ commit }, payload) {
-            client.post('auth',{
-                username: payload.username,
-                password: payload.password
-            }).then(response => {
-                if(response.status === 200){
-                    commit('login', response.data.data)
-                }
-            })
+            commit('login', payload.response.data.data)
         },
         userLogout({ commit }) {
             commit('logout')
