@@ -8,11 +8,12 @@
       <v-col>
         <v-form
             ref="form"
+            v-model="isFormValid"
             @submit.prevent="submit"
         >
           <v-row>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-comma" label="Judul" outlined v-model="report.title"></v-text-field>
+              <v-text-field prepend-icon="mdi-comma" label="Judul" outlined v-model="report.title" :rules="fieldRules" />
             </v-col>
             <v-col cols="12">
               <v-select
@@ -24,10 +25,11 @@
                   item-value="id"
                   outlined
                   :menu-props="{ offsetY: true }"
-              ></v-select>
+                  :rules="fieldRules"
+              />
             </v-col>
             <v-col cols="12" lg="6">
-              <v-text-field prepend-icon="mdi-comma" label="Fakta" outlined v-model="report.fact"></v-text-field>
+              <v-text-field prepend-icon="mdi-comma" label="Fakta" outlined v-model="report.fact" :rules="fieldRules" />
             </v-col>
             <v-col cols="12" lg="6">
               <v-menu
@@ -47,7 +49,8 @@
                       readonly
                       v-bind="attrs"
                       v-on="on"
-                  ></v-text-field>
+                      :rules="fieldRules"
+                  />
                 </template>
                 <v-date-picker
                     v-model="date"
@@ -56,8 +59,7 @@
               </v-menu>
             </v-col>
             <v-col cols="12" lg="4">
-              <v-text-field prepend-icon="mdi-map-marker" label="Wilayah Kejadian" v-model="report.location"
-                            outlined></v-text-field>
+              <v-text-field prepend-icon="mdi-map-marker" label="Wilayah Kejadian" v-model="report.location" outlined :rules="fieldRules" />
             </v-col>
             <v-col cols="12" lg="4">
               <v-select
@@ -71,7 +73,8 @@
                   menu-props="auto"
                   hide-details
                   @change="fetchVillages"
-              ></v-select>
+                  :rules="fieldRules"
+              />
             </v-col>
             <v-col cols="12" lg="4">
               <v-select
@@ -87,16 +90,17 @@
                   :disabled="villages.length === 0"
                   menu-props="auto"
                   hide-details
-              ></v-select>
+                  :rules="fieldRules"
+              />
             </v-col>
             <v-col cols="12">
-              <v-textarea prepend-icon="mdi-pencil" label="Uraian Kejadian" outlined v-model="report.description"></v-textarea>
+              <v-textarea prepend-icon="mdi-pencil" label="Uraian Kejadian" outlined v-model="report.description" :rules="fieldRules" />
             </v-col>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-alarm-light" label="Tindakan" outlined v-model="report.action"></v-text-field>
+              <v-text-field prepend-icon="mdi-alarm-light" label="Tindakan" outlined v-model="report.action" :rules="fieldRules" />
             </v-col>
             <v-col cols="12">
-              <v-textarea prepend-icon="mdi-comment-check" label="Rekomendasi" outlined v-model="report.recommendation"></v-textarea>
+              <v-textarea prepend-icon="mdi-comment-check" label="Rekomendasi" outlined v-model="report.recommendation" :rules="fieldRules" />
             </v-col>
             <v-col cols="12">
               <v-file-input
@@ -129,7 +133,7 @@
               </v-file-input>
             </v-col>
             <v-col cols="12">
-              <v-btn block type="submit" color="primary" width="13%">
+              <v-btn block type="submit" color="primary" width="13%" :disabled="!isFormValid">
                 {{this.$route.params.id!==undefined ? "Ubah" : "Kirim"}}
               </v-btn>
             </v-col>
@@ -171,6 +175,10 @@ export default {
   },
   data() {
     return {
+      fieldRules: [
+        v => !!v || 'Field ini tidak boleh kosong.',
+      ],
+      isFormValid: false,
       report: {
         category_id: '',
         title: '',
