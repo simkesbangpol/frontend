@@ -45,16 +45,7 @@
 
     <v-row>
       <v-col cols="12">
-        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
-            <template style="background: red;" v-slot:item="{ item }">
-                <v-breadcrumbs-item
-                    :to="item.to"
-                    :disabled="item.disabled"
-                >
-                    <h1>{{ item.text }}</h1>
-                </v-breadcrumbs-item>
-            </template>
-        </v-breadcrumbs>
+        <Breadcrumbs :dataBreadcrumbs='breadcrumbsItems'/>
       </v-col>
         <v-col cols="12" align-self="baseline">
             <h5 class="subheading black--text"><v-icon>mdi-account</v-icon>Diposting oleh <a @click="showModal = true">
@@ -104,10 +95,12 @@
 
 <script>
 import client from '@/axios'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 export default {
     name: 'DetailLaporan',
     components: {
+      Breadcrumbs,
     },
     data () {
         return {
@@ -147,13 +140,13 @@ export default {
             'action',
             'recommendation',
             'parsed_status',
-              'category'
+            'category'
           ],
           shownUserProps: [
             'email',
-              'name',
-              'address',
-              'phone_number'
+            'name',
+            'address',
+            'phone_number'
           ]
         }
     },
@@ -174,6 +167,7 @@ export default {
               obj[key] = this.report[key];
               return obj;
             }, {});
+        console.log("this.report.user..",this.report.user)
         this.filteredProfile = Object.keys(this.report.user)
             .filter(key => this.shownUserProps.includes(key))
             .reduce((obj, key) => {

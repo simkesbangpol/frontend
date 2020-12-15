@@ -2,17 +2,7 @@
   <v-container fluid>
     <v-row>
         <v-col cols="12">
-            <!-- <h3 class="subheading black--text"><a @click="navigateToKelolaAkun">Data Akun </a> / Detail Akun</h3> -->
-        <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
-            <template style="background: red;" v-slot:item="{ item }">
-                <v-breadcrumbs-item
-                    :to="item.to"
-                    :disabled="item.disabled"
-                >
-                    <h1>{{ item.text }}</h1>
-                </v-breadcrumbs-item>
-            </template>
-        </v-breadcrumbs>
+            <Breadcrumbs :dataBreadcrumbs='breadcrumbsItems'/>
         </v-col>
     </v-row>
     <v-row>
@@ -44,10 +34,12 @@
 <script>
 // @ is an alias to /src
 import client from '@/axios'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 export default {
     name: 'DetailAkun',
     components: {
+        Breadcrumbs,
     },
     data () {
         return {

@@ -7,16 +7,7 @@
           v-model="isFormValid"
           @submit.prevent="onSubmit"
         >
-          <v-breadcrumbs style="padding: 0;"  large light :items="breadcrumbsItems">
-              <template style="background: red;" v-slot:item="{ item }">
-                  <v-breadcrumbs-item
-                      :to="item.to"
-                      :disabled="item.disabled"
-                  >
-                      <h1>{{ item.text }}</h1>
-                  </v-breadcrumbs-item>
-              </template>
-          </v-breadcrumbs>
+          <Breadcrumbs :dataBreadcrumbs='breadcrumbsItems'/>
           <v-row class="ml-1">
             <v-text-field prepend-icon="mdi-home-city" label="Nama" outlined v-model="user.name" :rules="fieldRules"></v-text-field>
           </v-row>
@@ -110,10 +101,12 @@
 <script>
 // @ is an alias to /src
 import client from '@/axios'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 export default {
     name: 'BuatAkun',
     components: {
+      Breadcrumbs
     },
     data () {
         return {
@@ -193,6 +186,7 @@ export default {
       },
 
       getUserById(){
+          this.$store.dispatch('setLoadings', {isLoading: true})
           client.get('users/'+this.$route.params.id)
           .then(response => {
               if(response.status === 200){
@@ -202,6 +196,7 @@ export default {
                   this.fetchVillages()
               }
           })
+          .finally(() => this.$store.dispatch('setLoadings', {isLoading: false}))
       },
 
       fetchUsers(){
@@ -223,6 +218,7 @@ export default {
       },
 
       createAccount() {
+        this.$store.dispatch('setLoadings', {isLoading: true})
         client.post('users', this.user)
           .then(() => {
             this.dataSnackbar.showSnackbar = true
@@ -238,9 +234,11 @@ export default {
             this.dataSnackbar.colorSnackbar = "error"
             this.dataSnackbar.colorButton = "error"
           })
+          .finally(() => this.$store.dispatch('setLoadings', {isLoading: false}))
       },
 
       updateAccount() {
+        this.$store.dispatch('setLoadings', {isLoading: true})
         client.put('users/'+this.$route.params.id, this.user)
           .then(() => {
             this.dataSnackbar.showSnackbar = true
@@ -255,6 +253,7 @@ export default {
             this.dataSnackbar.colorSnackbar = "error"
             this.dataSnackbar.colorButton = "error"
           })
+          .finally(() => this.$store.dispatch('setLoadings', {isLoading: false}))
       },
 
       onSubmit() {

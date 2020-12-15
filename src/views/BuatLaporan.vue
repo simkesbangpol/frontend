@@ -2,16 +2,7 @@
   <v-container fluid>
     <v-row>
       <v-col cols="12">
-        <v-breadcrumbs v-if="this.$route.params.id!==undefined" style="padding: 0;"  large light :items="breadcrumbsItems">
-            <template style="background: red;" v-slot:item="{ item }">
-                <v-breadcrumbs-item
-                    :to="item.to"
-                    :disabled="item.disabled"
-                >
-                    <h1>{{ item.text }}</h1>
-                </v-breadcrumbs-item>
-            </template>
-        </v-breadcrumbs>
+        <Breadcrumbs v-if="this.$route.params.id!==undefined" :dataBreadcrumbs='breadcrumbsItems'/>
         <h1 v-else>Form Laporan Kejadian</h1>
       </v-col>
       <v-col>
@@ -170,10 +161,13 @@
 
 <script>
 import client from '@/axios'
+import Breadcrumbs from '../components/Breadcrumbs'
 
 export default {
   name: 'BuatLaporan',
-  components: {},
+  components: {
+    Breadcrumbs,
+  },
   computed: {
       categories() {
         return this.$store.getters.getReportCategories
