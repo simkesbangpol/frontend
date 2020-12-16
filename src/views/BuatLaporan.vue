@@ -397,6 +397,7 @@ export default {
     },
 
     fetchVillages() {
+      this.report.village_id = null
       this.villageLoading = true
       this.$store.dispatch('fetchVillages', { district_id: this.district_id }).then(() => {
         this.villageLoading = false

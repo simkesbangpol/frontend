@@ -194,6 +194,7 @@ export default {
       },
 
       fetchVillages() {
+        this.user.village_id = null
         this.villageLoading = true
         this.$store.dispatch('fetchVillages', { district_id: this.district_id })
         .then(() => {
