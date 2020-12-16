@@ -17,6 +17,7 @@
       <v-col cols="12" lg="6">
         <v-form
             ref="form"
+            v-model="isFormValid"
             @submit.prevent="submit"
         >
           <v-row>
@@ -24,13 +25,13 @@
               <h3 class="text-center mb-5"><v-icon left>mdi-lock</v-icon>Login</h3>
             </v-col>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess]" />
+              <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess, fieldRules]" />
             </v-col>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess || 'Username dan password anda salah !']" />
+              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined @focus="isLoginSuccess=true" :rules="[this.isLoginSuccess || 'Username dan password anda salah !', fieldRules]" />
             </v-col>
             <v-col cols="12">
-              <v-btn :loading="isLoading" block type="submit" color="primary">
+              <v-btn :loading="isLoading" block type="submit" color="primary" :disabled="!isFormValid">
                 Masuk
               </v-btn>
             </v-col>
@@ -58,6 +59,8 @@ export default {
   },
   data() {
     return {
+      fieldRules: v => !!v || 'Field ini tidak boleh kosong.',
+      isFormValid: false,
       username: '',
       password: '',
       isLoading: false,
