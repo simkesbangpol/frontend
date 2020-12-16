@@ -53,7 +53,7 @@
                   />
                 </template>
                 <v-date-picker
-                    v-model="date"
+                    v-model="report.date"
                     @input="menu2 = false"
                 ></v-date-picker>
               </v-menu>
@@ -236,7 +236,6 @@ export default {
         ],
       files: [],
       select: null,
-      date: new Date().toISOString().substr(0, 10),
       menu: false,
       modal: false,
       menu2: false,
