@@ -208,7 +208,7 @@
     <v-dialog
       v-model="showImportModal"
       persistent
-      max-width="600px"
+      max-width="80%"
     >
       <v-card>
         <v-card-title>
@@ -217,6 +217,23 @@
         <v-card-text>
           <v-container>
             <v-row>
+              <v-col cols="12">
+                <h3 class="black--text">Contoh Format Import File Excel</h3>
+                <v-img class="mb-3" src="@/assets/format_import_excel.jpg" alt="" max-height="100%" max-width="100%" />
+                <h3 class="black--text">Daftar Tab Import File Excel</h3>
+                <v-img class="mb-3" src="@/assets/tab_format_import.jpg" alt="" max-height="50%" max-width="50%" />
+                <p class="mb-3 black--text">Data siswa mulai terbaca mulai baris kedua, baris pertama digunakan untuk judul.
+                  <br>
+                  Format field :
+                  <ol>
+                    <li>Kategori Laporan : Ideologi, Politik, Ekonomi, Sosial, dan Budaya</li>
+                    <li>Tanggal Kejadian : Tanggal/Bulan/Tahun</li>
+                    <li>Kecamatan : Harus terdaftar didalam tab "Kecamatan"</li>
+                    <li>Kelurahan : Harus terdaftar didalam tab "Kelurahan"</li>
+                  </ol>
+                </p>
+                <v-btn>Download File Format</v-btn>
+              </v-col>
               <v-col cols="12">
                 <v-file-input
                   v-model="files"
