@@ -27,7 +27,7 @@
           <v-card-title>
             <v-row>
               <v-col cols="12" lg="6">
-                <h3>Jumlah Laporan Peristiwa</h3>
+                <h3>Jumlah Laporan Kejadian</h3>
               </v-col>
               <v-col cols="12" lg="6">
                 <v-dialog
@@ -68,13 +68,13 @@
           <v-card-text>
             <v-row class="d-flex flex-wrap flex-row">
                 <v-flex v-for="(category, index) in categories" :key="index" >
-                  <v-card class="text-center ma-3" router to="/lihat-laporan" style="text-decoration: none;">
+                  <v-card class="text-center ma-3" router :disabled="category.unprocessed_count===0" :to="'/lihat-laporan'" style="text-decoration: none;">
                     <div>
                       <v-icon size="80" :color="colorSentIcon[index]">mdi-send mdi-rotate-315</v-icon>
                     </div>
                     <v-card-text>
-                      <h5 style="color: black; font-weight: bold; font-size: 35px">{{category.unprocessed_count}}</h5>
-                      <h5 style="color: black; font-weight: 300;">{{category.name}}</h5>
+                      <h5 style="color: black; font-weight: bold; font-size: 30px">{{category.unprocessed_count}}</h5>
+                      <h5 style="color: black; font-weight: 500; font-size: 15px">{{category.name}}</h5>
                     </v-card-text>
                   </v-card>
                 </v-flex>
