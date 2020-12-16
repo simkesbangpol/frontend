@@ -396,22 +396,6 @@ export default {
         })
     },
 
-    resetForm(){
-        this.report = {
-          category_id: '',
-          title: '',
-          fact: '',
-          date: new Date().toISOString().substr(0, 10),
-          location: '',
-          description: '',
-          action: '',
-          recommendation: '',
-          // file: [],
-          village_id: null,
-          status: 0
-        }
-    },
-
     fetchVillages() {
       this.villageLoading = true
       this.$store.dispatch('fetchVillages', { district_id: this.district_id }).then(() => {
