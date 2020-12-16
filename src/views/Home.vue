@@ -68,7 +68,7 @@
           <v-card-text>
             <v-row class="d-flex flex-wrap flex-row">
                 <v-flex v-for="(category, index) in categories" :key="index" >
-                  <v-card class="text-center ma-3" router :disabled="category.unprocessed_count===0" @click="navigateToReportList(category.id)" style="text-decoration: none;">
+                  <v-card class="text-center ma-3" router :disabled="category.unprocessed_count===0" @click="navigateToReportList({category_id: category.id})" style="text-decoration: none;">
                     <div>
                       <v-icon size="80" :color="colorSentIcon[index]">mdi-send mdi-rotate-315</v-icon>
                     </div>
@@ -98,7 +98,7 @@
                 item-key="name"
               ><router-link to="/lihat-laporan"></router-link></v-data-table>
               <v-card-actions>
-                <v-btn text color="primary" style="text-transform: none;" :to="tableData.route">Selengkapnya ...</v-btn>
+                <v-btn text color="primary" style="text-transform: none;" @click="navigateToReportList({status: tableData.status_id})">Selengkapnya ...</v-btn>
               </v-card-actions>
             </div>
           </v-col>
@@ -123,8 +123,8 @@ export default {
       onProgressReports: [],
       reports: [],
       tables: [
-        {title: 'Laporan Terbaru', reports: [], icon: 'mdi-message-alert', route: '/lihat-laporan'},
-        {title: 'Laporan Sedang Diproses', reports: [], icon: 'mdi-message-processing', route: '/lihat-laporan'},
+        {title: 'Laporan Terbaru', reports: [], icon: 'mdi-message-alert', status_id: 0},
+        {title: 'Laporan Sedang Diproses', reports: [], icon: 'mdi-message-processing', status_id: 1},
       ],
       headers: [
         {
@@ -148,8 +148,8 @@ export default {
     this.fetchSummary()
   },
   methods: {
-    navigateToReportList(category_id){
-      this.$router.push({name: `LihatLaporan`, params: {filter: {category_id}}})
+    navigateToReportList(filterField){
+      this.$router.push({name: `LihatLaporan`, params: {filter: filterField}})
     },
     fetchSummary(){
       client.get('dashboard/summary')
