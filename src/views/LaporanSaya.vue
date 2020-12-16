@@ -49,7 +49,7 @@ import Snackbar from '../components/Snackbar'
             value: 'category.name',
           },
           { text: 'Laporan', sortable: false, value: 'title' },
-          { text: 'Tanggal Kejadian', sortable: false, value: 'date' },
+          { text: 'Tanggal Kejadian', sortable: false, value: 'parsed_date' },
           { text: 'Status', sortable: false, value: 'parsed_status' },
           { text: 'Actions', sortable: false, value: 'actions' },
         ],

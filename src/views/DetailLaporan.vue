@@ -52,7 +52,7 @@
               {{ this.report !== {} ? this.report.user.name : ''}}
             </a></h5>
             <h5 class="subheading black--text"><v-icon>mdi-calendar-edit</v-icon>
-              {{ this.report.parsed_date }}
+              {{ this.report.parsed_created_at }}
             </h5>
         </v-col>
     </v-row>
