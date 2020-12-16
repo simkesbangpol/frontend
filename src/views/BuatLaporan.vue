@@ -301,7 +301,7 @@ export default {
             this.report.recommendation = dataReport.recommendation
             this.report.village_id = dataReport.village_id
             this.report.user_id = dataReport.user_id
-            this.getDistrictIdByVillageId(this.report.village_id)
+            this.getVillageByVillageId(this.report.village_id)
           } else {
             this.dataSnackbar.showSnackbar = true
             this.dataSnackbar.message = `Data gagal diperbarui !`
@@ -322,7 +322,7 @@ export default {
         })
     },
 
-    getDistrictIdByVillageId(villageId){
+    getVillageByVillageId(villageId){
         this.$store.dispatch('setLoadings', {isLoading: true})
         client.get('villages/'+villageId)
         .then((response) => {

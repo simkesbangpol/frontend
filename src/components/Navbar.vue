@@ -193,17 +193,6 @@ export default {
         this.showModalProfile = true
       })
     },
-    getVillagesIdByVillageId(villageId){
-      this.$store.dispatch('setLoadings', {isLoading: true})
-      client.get('villages/'+villageId)
-      .then((response) => {
-        this.$store.dispatch('setLoadings', {isLoading: false})
-        if(response.status === 200){
-          this.district_id = response.data.data.district_id
-          this.fetchVillages()
-        }
-      })
-    },
   }
 }
 </script>
