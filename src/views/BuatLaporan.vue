@@ -251,9 +251,11 @@ export default {
   },
   methods: {
     submit() {
+      this.$store.dispatch('setLoadings', {isLoading: true})
       if (this.$route.params.id!==undefined) {
         client.put('reports/'+this.$route.params.id, this.report)
         .then((response) => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
           if(response.data.status){
             this.dataSnackbar.showSnackbar = true
             this.dataSnackbar.message = "Data berhasil diperbarui !"
@@ -270,6 +272,7 @@ export default {
           }
         })
         .catch((err) => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
           this.dataSnackbar.showSnackbar = true
           this.dataSnackbar.message = "Data gagal diperbarui ! "+err
           this.dataSnackbar.textButton = "Tutup"
@@ -277,7 +280,9 @@ export default {
           this.dataSnackbar.colorButton = "error"
         })
       } else {
-        client.post('reports', this.report).then(response => {
+        client.post('reports', this.report)
+        .then(response => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
           if(response.status === 200){
             this.reportId = response.data.data.id
             this.uploadFile()
@@ -291,6 +296,7 @@ export default {
           }
         })
         .catch((err) => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
           console.error(err)
           this.dataSnackbar.message = `Data gagal terkirim ! ${err}`
           this.dataSnackbar.textButton = "Tutup"
@@ -303,13 +309,16 @@ export default {
     },
 
     uploadFile(){
+      this.$store.dispatch('setLoadings', {isLoading: true})
       let formData = new FormData()
       formData.append('file', this.files)
       client.post(`reports/${this.reportId}/file`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }
-      }).then(response => {
+      })
+      .then(response => {
+        this.$store.dispatch('setLoadings', {isLoading: false})
         if(response.status === 200){
           this.dataSnackbar.message = `Data berhasil terkirim !`
           this.dataSnackbar.textButton = "Tutup"
@@ -326,6 +335,7 @@ export default {
           this.dataSnackbar.showSnackbar = true
         }
       }).catch(err => {
+        this.$store.dispatch('setLoadings', {isLoading: false})
         console.error(err)
         this.dataSnackbar.message = `Gagal upload file ! ${err}`
         this.dataSnackbar.textButton = "Tutup"
