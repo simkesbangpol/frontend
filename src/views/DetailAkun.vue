@@ -28,21 +28,32 @@
             <v-btn color="primary" :to="'/ubah-akun/'+idUser">Ubah</v-btn>
         </v-col>
     </v-row>
+    <Snackbar :dataSnackbar="dataSnackbar" />
   </v-container>
 </template>
 
 <script>
 // @ is an alias to /src
 import client from '@/axios'
+import Snackbar from '../components/Snackbar'
 import Breadcrumbs from '../components/Breadcrumbs'
 
 export default {
     name: 'DetailAkun',
     components: {
         Breadcrumbs,
+        Snackbar,
     },
     data () {
         return {
+            dataSnackbar: {
+                showSnackbar: false,
+                timeoutSnackbar: 0,
+                message: "",
+                textButton: "",
+                colorSnackbar: "",
+                colorButton: "",
+            },
             idUser: "",
             detailAkun: [],
             breadcrumbsItems: [
@@ -64,8 +75,10 @@ export default {
     },
     methods: {
         fetchUsers(){
+            this.$store.dispatch('setLoadings', {isLoading: true})
             client.get('users/'+this.$route.params.id)
             .then(response => {
+                this.$store.dispatch('setLoadings', {isLoading: false})
                 if(response.status === 200){
                     const dataUser = response.data.data
                     this.idUser = dataUser.id
@@ -77,7 +90,21 @@ export default {
                         {title: "Role Akses", desc: dataUser.roles[0]},
                         {title: "Username", desc: dataUser.username},
                     ]
+                } else {
+                    this.dataSnackbar.showSnackbar = true
+                    this.dataSnackbar.message = "Data gagal diperbarui ! "
+                    this.dataSnackbar.textButton = "Tutup"
+                    this.dataSnackbar.colorSnackbar = "error"
+                    this.dataSnackbar.colorButton = "error"
                 }
+            })
+            .catch((err) => {
+                this.$store.dispatch('setLoadings', {isLoading: false})
+                this.dataSnackbar.showSnackbar = true
+                this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
+                this.dataSnackbar.textButton = "Tutup"
+                this.dataSnackbar.colorSnackbar = "error"
+                this.dataSnackbar.colorButton = "error"
             })
         }
     },

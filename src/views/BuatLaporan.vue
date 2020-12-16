@@ -286,25 +286,42 @@ export default {
     },
 
     getReportById(){
+        this.$store.dispatch('setLoadings', {isLoading: true})
         client.get('reports/'+this.$route.params.id)
         .then(response => {
-            if(response.status === 200){
-                // this.report = response.data.data
-                const dataReport = response.data.data
-                this.report.category_id = dataReport.category_id
-                this.report.title = dataReport.title
-                this.report.fact = dataReport.fact
-                this.report.date = dataReport.date
-                this.report.location = dataReport.location
-                this.report.description = dataReport.description
-                this.report.action = dataReport.action
-                this.report.recommendation = dataReport.recommendation
-                this.report.village_id = dataReport.village_id
-                this.report.user_id = dataReport.user_id
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          if(response.status === 200){
+            const dataReport = response.data.data
+            this.report.category_id = dataReport.category_id
+            this.report.title = dataReport.title
+            this.report.fact = dataReport.fact
+            this.report.date = dataReport.date
+            this.report.location = dataReport.location
+            this.report.description = dataReport.description
+            this.report.action = dataReport.action
+            this.report.recommendation = dataReport.recommendation
+            this.report.village_id = dataReport.village_id
+            this.report.user_id = dataReport.user_id
 
-                this.district_id = response.data.data.village_id
-                this.getDistrictIdByVillageId(response.data.data.village_id)
-            }
+            this.district_id = response.data.data.village_id
+            this.getDistrictIdByVillageId(response.data.data.village_id)
+          } else {
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = `Data gagal diperbarui !`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
+            this.dataSnackbar.timeoutSnackbar = 0
+          }
+        })
+        .catch((err) => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 0
         })
     },
 

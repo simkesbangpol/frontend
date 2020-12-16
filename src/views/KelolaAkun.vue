@@ -10,6 +10,7 @@
           :search="search"
           :custom-filter="filterOnlyCapsText"
           class="elevation-6"
+          :loading="tableLoading"
         >
           <template v-slot:top>
             <v-row no-gutters class="mr-1 ml-1" align="baseline">
@@ -100,6 +101,7 @@ export default {
   },
   data () {
     return {
+      tableLoading: false,
       itemSelected: "",
       dataSnackbar: {
         showSnackbar: false,
@@ -138,14 +140,30 @@ export default {
     },
 
     fetchUsers(){
-      this.$store.dispatch('setLoadings', {isLoading: true})
+      this.tableLoading = true
       client.get('users')
       .then(response => {
+        this.tableLoading = false
         if(response.status === 200){
           this.users = response.data.data
+        } else {
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = "Data gagal diperbarui !"
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 0
         }
       })
-      .finally(() => this.$store.dispatch('setLoadings', {isLoading: false}))
+      .catch((err) => {
+        this.tableLoading = false
+        this.dataSnackbar.showSnackbar = true
+        this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
+        this.dataSnackbar.textButton = "Tutup"
+        this.dataSnackbar.colorSnackbar = "error"
+        this.dataSnackbar.colorButton = "error"
+        this.dataSnackbar.timeoutSnackbar = 0
+      })
     },
     deleteUser(dataUser) {
       const id = dataUser.id

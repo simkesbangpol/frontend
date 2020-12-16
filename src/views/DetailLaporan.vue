@@ -89,6 +89,7 @@
               </v-col>
             </v-row>
         </v-col>
+        <Snackbar :dataSnackbar="dataSnackbar" />
     </v-row>
   </v-container>
 </template>
@@ -96,11 +97,13 @@
 <script>
 import client from '@/axios'
 import Breadcrumbs from '../components/Breadcrumbs'
+import Snackbar from '../components/Snackbar'
 
 export default {
     name: 'DetailLaporan',
     components: {
       Breadcrumbs,
+      Snackbar,
     },
     data () {
         return {
@@ -147,7 +150,15 @@ export default {
             'name',
             'address',
             'phone_number'
-          ]
+          ],
+          dataSnackbar: {
+              showSnackbar: false,
+              timeoutSnackbar: 0,
+              message: "",
+              textButton: "",
+              colorSnackbar: "",
+              colorButton: "",
+          },
         }
     },
   mounted(){
@@ -155,9 +166,28 @@ export default {
   },
   methods: {
       fetchReport(){
-        client.get(`reports/${this.$route.params.id}`).then(response => {
-          this.report = response.data.data
-          this.getDetailReport()
+        this.$store.dispatch('setLoadings', {isLoading: true})
+        client.get(`reports/${this.$route.params.id}`)
+        .then(response => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          if (response.status === 200) {
+            this.report = response.data.data
+            this.getDetailReport()
+          } else {
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = "Data gagal diperbarui ! "
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
+          }
+        })
+        .catch((err) => {
+            this.$store.dispatch('setLoadings', {isLoading: false})
+            this.dataSnackbar.showSnackbar = true
+            this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
         })
       },
     getDetailReport(){
