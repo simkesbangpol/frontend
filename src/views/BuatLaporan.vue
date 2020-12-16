@@ -184,8 +184,10 @@ export default {
         recommendation: '',
         // file: [],
         village_id: null,
-        user_id: this.$store.getters.getUser.id
+        user_id: this.$store.getters.getUser.id,
+        status: 0,
       },
+      reportId: null,
       villageLoading: false,
       district_id: null,
       maxSizeFile: [
@@ -228,11 +230,28 @@ export default {
         })
       } else {
         client.post('reports', this.report).then(response => {
-          if(response.data.status){
-            this.resetForm()
+          if(response.data.status === 'success'){
+            this.reportId = response.data.report.id
+            this.uploadFile()
           }
         })
       }
+    },
+
+    uploadFile(){
+      let formData = new FormData()
+      formData.append('file', this.files)
+      client.post(`reports/${this.reportId}/file`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      }).then(response => {
+        if(response.data.status === 'success'){
+          this.resetForm()
+        }
+      }).catch(e => {
+        console.error(e)
+      })
     },
 
     getReportById(){
@@ -279,6 +298,7 @@ export default {
           recommendation: '',
           // file: [],
           village_id: null,
+          status: 0
         }
     },
 
