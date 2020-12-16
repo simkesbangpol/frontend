@@ -105,7 +105,7 @@
             <v-col cols="12">
               <v-file-input
                   :rules="maxSizeFile"
-                  v-model="report.file"
+                  v-model="files"
                   counter
                   label="File input"
                   placeholder="Select your files"
@@ -188,7 +188,6 @@ export default {
         description: '',
         action: '',
         recommendation: '',
-        // file: [],
         village_id: null,
         user_id: this.$store.getters.getUser.id,
         status: 0,
@@ -279,10 +278,26 @@ export default {
         })
       } else {
         client.post('reports', this.report).then(response => {
-          if(response.data.status === 'success'){
-            this.reportId = response.data.report.id
+          if(response.status === 200){
+            this.reportId = response.data.data.id
             this.uploadFile()
+          } else {
+            this.dataSnackbar.message = `Data gagal terkirim !`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
+            this.dataSnackbar.timeoutSnackbar = 3000
+            this.dataSnackbar.showSnackbar = true
           }
+        })
+        .catch((err) => {
+          console.error(err)
+          this.dataSnackbar.message = `Data gagal terkirim ! ${err}`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+          this.dataSnackbar.showSnackbar = true
         })
       }
     },
@@ -295,11 +310,29 @@ export default {
           'Content-Type': 'multipart/form-data'
         }
       }).then(response => {
-        if(response.data.status === 'success'){
-          this.resetForm()
+        if(response.status === 200){
+          this.dataSnackbar.message = `Data berhasil terkirim !`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "success"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+          this.dataSnackbar.showSnackbar = true
+        } else {
+          this.dataSnackbar.message = `Gagal upload file !`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+          this.dataSnackbar.showSnackbar = true
         }
-      }).catch(e => {
-        console.error(e)
+      }).catch(err => {
+        console.error(err)
+        this.dataSnackbar.message = `Gagal upload file ! ${err}`
+        this.dataSnackbar.textButton = "Tutup"
+        this.dataSnackbar.colorSnackbar = "error"
+        this.dataSnackbar.colorButton = "error"
+        this.dataSnackbar.timeoutSnackbar = 3000
+        this.dataSnackbar.showSnackbar = true
       })
     },
 
