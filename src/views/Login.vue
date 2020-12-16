@@ -27,10 +27,7 @@
               <v-text-field prepend-icon="mdi-account" label="Username" v-model="username" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess]" />
             </v-col>
             <v-col cols="12">
-              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess]" />
-            </v-col>
-            <v-col cols="12">
-              <h4 class="text-center red--text" v-if="!isLoginSuccess"><strong>Username dan password anda salah !!</strong></h4>
+              <v-text-field prepend-icon="mdi-key-variant" type="password" v-model="password" label="Password" outlined @focus="isLoginSuccess=true" :rules="[isLoginSuccess || 'Username dan password anda salah !']" />
             </v-col>
             <v-col cols="12">
               <v-btn :loading="isLoading" block type="submit" color="primary">
