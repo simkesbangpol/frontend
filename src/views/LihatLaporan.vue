@@ -393,6 +393,10 @@ export default {
     if (this.$route.params.dataSnackbar) {
       this.dataSnackbar = this.$route.params.dataSnackbar
     }
+    if (this.$route.params.filter) {
+      this.isFiltered = true
+      this.filter = this.$route.params.filter
+    }
     this.fetchReports()
   },
   methods: {

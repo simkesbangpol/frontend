@@ -68,7 +68,7 @@
           <v-card-text>
             <v-row class="d-flex flex-wrap flex-row">
                 <v-flex v-for="(category, index) in categories" :key="index" >
-                  <v-card class="text-center ma-3" router :disabled="category.unprocessed_count===0" :to="'/lihat-laporan'" style="text-decoration: none;">
+                  <v-card class="text-center ma-3" router :disabled="category.unprocessed_count===0" @click="navigateToReportList(category.id)" style="text-decoration: none;">
                     <div>
                       <v-icon size="80" :color="colorSentIcon[index]">mdi-send mdi-rotate-315</v-icon>
                     </div>
@@ -148,6 +148,9 @@ export default {
     this.fetchSummary()
   },
   methods: {
+    navigateToReportList(category_id){
+      this.$router.push({name: `LihatLaporan`, params: {filter: {category_id}}})
+    },
     fetchSummary(){
       client.get('dashboard/summary')
       .then(response => {
