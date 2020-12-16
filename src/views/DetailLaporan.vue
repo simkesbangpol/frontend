@@ -213,9 +213,36 @@ export default {
         window.location = client.defaults.baseURL+this.report.file.substring(1)
     },
     updateStatus(){
-      client.patch(`reports/${this.$route.params.id}`, {status: this.selectedStatus}).then(response => {
-        this.report = response.data.data
-        this.getDetailReport()
+      this.$store.dispatch('setLoadings', {isLoading: true})
+      client.patch(`reports/${this.$route.params.id}`, {status: this.selectedStatus})
+      .then(response => {
+        this.$store.dispatch('setLoadings', {isLoading: false})
+        if (response.status === 200) {
+          this.report = response.data.data
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = `Data berhasil diperbarui !`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "success"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+          this.getDetailReport()
+        } else {
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = `Data gagal diperbarui !`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+        }
+      })
+      .catch((err) => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
       })
     }
   }
