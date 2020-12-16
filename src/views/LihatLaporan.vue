@@ -174,11 +174,12 @@
                 <v-select
                   :items="villages"
                   label="Kelurahan"
-                  :disabled="villages.length === 0"
+                  :disabled="filter.district_id===null"
                   item-text="name"
                   item-value="id"
                   v-model="filter.village_id"
                   :loading="villageLoading"
+                  :rules="rulesVillageField"
                   required
                 ></v-select>
               </v-col>
@@ -197,6 +198,7 @@
           <v-btn
             color="blue darken-1"
             text
+            :disabled="filter.district_id!==null && filter.village_id===null"
             @click="doFilter"
           >
             Filter
@@ -326,6 +328,7 @@ export default {
   },
   data () {
     return {
+      rulesVillageField: [true],
       dataSnackbar: {
         showSnackbar: false,
         timeoutSnackbar: 2000,
@@ -374,6 +377,7 @@ export default {
         date_end: null,
         category_id: null,
         status: null,
+        district_id: null,
         village_id: null,
       },
       files: [],
@@ -417,6 +421,9 @@ export default {
     this.fetchReports()
   },
   methods: {
+    validateVillageField() {
+      if (this.filter.district_id!==null) this.rulesVillageField = [v => !!v || `Field ini harus diisi.`]
+    },
     onClickDelete(item) {
       this.itemSelected=item
       this.showModalDelete=true
@@ -454,8 +461,10 @@ export default {
         date_end: null,
         category_id: null,
         status: null,
+        district_id: null,
         village_id: null,
       }
+      this.rulesVillageField = [true]
       this.isFiltered = false
       this.showFilterModal = false
       this.fetchReports()
@@ -497,6 +506,8 @@ export default {
       })
     },
     districtChange(){
+      this.filter.village_id = null
+      this.validateVillageField()
       this.villageLoading = true
       this.$store.dispatch('fetchVillages', { district_id: this.filter.district_id }).then(() => {
         this.villageLoading = false
