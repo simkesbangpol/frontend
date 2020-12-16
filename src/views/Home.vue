@@ -144,24 +144,28 @@ export default {
     },
   },
   mounted() {
+    this.$store.dispatch('setLoadings', {isLoading: true})
     this.fetchSummary()
-    this.fetchLatestReports()
-    this.fetchOnProgressReports()
   },
   methods: {
     fetchSummary(){
-      client.get('dashboard/summary').then(response => {
+      client.get('dashboard/summary')
+      .then(response => {
         this.categories = response.data.data
       })
+      .finally(() => this.fetchLatestReports())
     },
     fetchLatestReports(){
-      client.get('dashboard/reports/status/0').then(response => {
+      client.get('dashboard/reports/status/0')
+      .then(response => {
         this.tables[0].reports = response.data.data.data
       })
+      .finally(() => this.fetchOnProgressReports())
     },
     fetchOnProgressReports(){
       client.get('dashboard/reports/status/1').then(response => {
         this.tables[1].reports = response.data.data.data
+        this.$store.dispatch('setLoadings', {isLoading: false})
       })
     }
   }
