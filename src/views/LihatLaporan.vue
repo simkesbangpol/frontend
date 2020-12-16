@@ -43,7 +43,7 @@
                   outlined
                   append-icon="mdi-table-search"
                   v-model="search"
-                  label="Cari (minimal 4 karakter)"
+                  label="Cari Judul"
                 ></v-text-field>
               </v-col>
               <v-col md="1" cols="12">
@@ -340,7 +340,7 @@ export default {
           sortable: false,
           value: 'category.name',
         },
-        { text: 'Laporan', sortable: false, value: 'title' },
+        { text: 'Judul Laporan', sortable: false, value: 'title' },
         { text: 'Tanggal Kejadian', sortable: false, value: 'date' },
         { text: 'Status', sortable: false, value: 'parsed_status' },
         { text: 'Actions', sortable: false, value: 'actions' },
@@ -442,14 +442,10 @@ export default {
     searchReport(){
       if(!this.awaitingSearch ){
         setTimeout(() => {
-          this.isSearching = this.search.length > 3
-          if(this.search.length > 3){
-            this.fetchReports()
-          } else if(this.search.length === 0){
-            this.fetchReports()
-          }
+          this.isSearching = this.search.length > 0
+          this.fetchReports()
           this.awaitingSearch = false
-        }, 1500)
+        }, 1000)
       }
       this.awaitingSearch = true
     },
