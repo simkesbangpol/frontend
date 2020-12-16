@@ -96,40 +96,38 @@
         <v-card-text>
           <v-container>
             <v-row>
-              <!-- <div style="display: flex;"> -->
-                <v-col cols="12">
-                  <v-dialog
-                    ref="dialog"
-                    v-model="dateModal"
-                    :return-value.sync="date"
-                    persistent
-                    width="290px"
-                  >
-                    <template v-slot:activator="{ on, attrs }">
-                      <v-text-field
-                        label="Rentang Tanggal"
-                        v-model="dateRangeText"
-                        append-outer-icon="mdi-calendar"
-                        readonly
-                        v-bind="attrs"
-                        v-on="on"
-                      ></v-text-field>
-                    </template>
-                    <v-date-picker v-model="dates" scrollable range :min="getMinDate()">
-                      <v-spacer></v-spacer>
-                      <v-btn text color="primary" @click="dates = []" >
-                        Ulang
-                      </v-btn>
-                      <v-btn text color="error" @click="dateModal = false" >
-                        Batal
-                      </v-btn>
-                      <v-btn text color="success" @click="$refs.dialog.save(dates)" >
-                        OK
-                      </v-btn>
-                    </v-date-picker>
-                  </v-dialog>
-                </v-col>
-              <!-- </div> -->
+              <v-col cols="12">
+                <v-dialog
+                  ref="dialog"
+                  v-model="dateModal"
+                  :return-value.sync="date"
+                  persistent
+                  width="290px"
+                >
+                  <template v-slot:activator="{ on, attrs }">
+                    <v-text-field
+                      label="Rentang Tanggal"
+                      v-model="dateRangeText"
+                      append-outer-icon="mdi-calendar"
+                      readonly
+                      v-bind="attrs"
+                      v-on="on"
+                    ></v-text-field>
+                  </template>
+                  <v-date-picker v-model="dates" scrollable range :min="getMinDate()">
+                    <v-spacer></v-spacer>
+                    <v-btn text color="primary" @click="dates = []" >
+                      Ulang
+                    </v-btn>
+                    <v-btn text color="error" @click="dateModal = false" >
+                      Batal
+                    </v-btn>
+                    <v-btn text color="success" @click="$refs.dialog.save(dates)" >
+                      OK
+                    </v-btn>
+                  </v-date-picker>
+                </v-dialog>
+              </v-col>
 
               <v-col
                 cols="12"
