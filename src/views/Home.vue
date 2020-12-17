@@ -48,15 +48,15 @@
                         v-on="on"
                     ></v-text-field>
                   </template>
-                  <v-date-picker v-model="dates" scrollable range>
+                  <v-date-picker v-model="dates" scrollable range :min="getMinDate()">
                     <v-spacer></v-spacer>
-                    <v-btn text color="primary" @click="dates = []" >
+                    <v-btn text color="primary" @click="onResetFilter" >
                       Ulang
                     </v-btn>
                     <v-btn text color="error" @click="modal = false" >
                       Batal
                     </v-btn>
-                    <v-btn text color="success" @click="$refs.dialog.save(dates)" >
+                    <v-btn text color="success" @click="onFilterDate" >
                       OK
                     </v-btn>
                   </v-date-picker>
@@ -68,12 +68,12 @@
           <v-card-text>
             <v-row class="d-flex flex-wrap flex-row">
                 <v-flex v-for="(category, index) in categories" :key="index" >
-                  <v-card class="text-center ma-3" router :disabled="category.unprocessed_count===0" @click="navigateToReportList({category_id: category.id})" style="text-decoration: none;">
+                  <v-card class="text-center ma-3" router :disabled="category.report_count===0" @click="navigateToReportList({category_id: category.id})" style="text-decoration: none;">
                     <div>
                       <v-icon size="80" :color="colorSentIcon[index]">mdi-send mdi-rotate-315</v-icon>
                     </div>
                     <v-card-text>
-                      <h5 style="color: black; font-weight: bold; font-size: 30px">{{category.unprocessed_count}}</h5>
+                      <h5 style="color: black; font-weight: bold; font-size: 30px">{{category.report_count}}</h5>
                       <h5 style="color: black; font-weight: 500; font-size: 15px">{{category.name}}</h5>
                     </v-card-text>
                   </v-card>
@@ -136,6 +136,11 @@ export default {
       ],
       dates: [],
       modal: false,
+      isFiltered: false,
+      filter: {
+        date_start: null,
+        date_end: null,
+      },
     }
   },
   computed: {
@@ -151,10 +156,36 @@ export default {
     navigateToReportList(filterField){
       this.$router.push({name: `LihatLaporan`, params: {filter: filterField}})
     },
+    onResetFilter() {
+      this.dates = []
+      this.filter.date_start = null
+      this.filter.date_end = null
+      this.isFiltered = false
+    },
+    onFilterDate() {
+      this.$refs.dialog.save(this.dates)
+      this.filter.date_start = this.dates[0]
+      this.filter.date_end = this.dates[1]
+      this.isFiltered = true
+      this.fetchSummary()
+    },
+    getMinDate(){
+      if(this.dates.length === 2)
+        return ''
+      else
+        return this.dates[0]
+    },
     fetchSummary(){
-      client.get('dashboard/summary')
+      client.get('dashboard/summary', {
+        params: {
+          ...(this.isFiltered ? this.filter : {}),
+        }
+      })
       .then(response => {
-        this.categories = response.data.data
+        const data = response.data.data
+        if (response.status===200 && data.length>0) {
+          this.categories = data
+        }
       })
       .finally(() => this.fetchLatestReports())
     },
