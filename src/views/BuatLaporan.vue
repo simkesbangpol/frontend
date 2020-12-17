@@ -108,25 +108,33 @@
                   prepend-icon="mdi-paperclip"
                   outlined
                   :show-size="1000"
+                  v-if="false"
               >
                 <template v-slot:selection="{ index, text }">
-                  <v-chip
-                      v-if="index < 2"
-                      dark
-                      label
-                      small
-                  >
+                  <v-chip v-if="index < 2" dark label small >
                     {{ text }}
                   </v-chip>
 
                   <span
-                      v-else-if="index === 2"
-                      class="overline grey--text text--darken-3 mx-2"
+                    v-else-if="index === 2"
+                    class="overline grey--text text--darken-3 mx-2"
                   >
-                  +{{ files.length - 2 }} File(s)
-                </span>
+                    +{{ files.length - 2 }} File(s)
+                  </span>
                 </template>
               </v-file-input>
+
+              <v-row v-else dense>
+                <v-col cols="12">
+                  <v-card class="text-center" width="15%" @click="{}" style="text-decoration: none;">
+                    <v-card-text>
+                      <v-icon size="30">mdi-download</v-icon>
+                      <h5 style="color: black; font-size: 15px">Unduh File</h5>
+                    </v-card-text>
+                  </v-card>
+                  <v-btn class="mt-2" color="primary" width="15%" text @click="{}">Ubah file</v-btn>
+                </v-col>
+              </v-row>
             </v-col>
             <v-col cols="12">
               <v-btn block type="submit" color="primary" width="13%" :disabled="!isFormValid">
