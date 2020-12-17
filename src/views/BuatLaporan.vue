@@ -265,7 +265,8 @@ export default {
             this.dataSnackbar.textButton = "Tutup"
             this.dataSnackbar.colorSnackbar = "success"
             this.dataSnackbar.colorButton = "error"
-            this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
+            this.reportId = response.data.data.id
+            this.uploadFile(true)
           } else {
             this.dataSnackbar.showSnackbar = true
             this.dataSnackbar.message = "Data gagal diperbarui ! "
@@ -311,42 +312,46 @@ export default {
       }
     },
 
-    uploadFile(){
-      this.$store.dispatch('setLoadings', {isLoading: true})
-      let formData = new FormData()
-      formData.append('file', this.files)
-      client.post(`reports/${this.reportId}/file`, formData, {
-        headers: {
-          'Content-Type': 'multipart/form-data'
-        }
-      })
-      .then(response => {
-        this.$store.dispatch('setLoadings', {isLoading: false})
-        if(response.status === 200){
-          this.dataSnackbar.message = `Data berhasil terkirim !`
-          this.dataSnackbar.textButton = "Tutup"
-          this.dataSnackbar.colorSnackbar = "success"
-          this.dataSnackbar.colorButton = "error"
-          this.dataSnackbar.timeoutSnackbar = 3000
-          this.dataSnackbar.showSnackbar = true
-        } else {
-          this.dataSnackbar.message = `Gagal upload file !`
+    uploadFile(updateReport){
+      if (this.files) {
+        this.$store.dispatch('setLoadings', {isLoading: true})
+        let formData = new FormData()
+        formData.append('file', this.files)
+        client.post(`reports/${this.reportId}/file`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(response => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          if(response.status === 200){
+            this.dataSnackbar.message = `Data berhasil terkirim !`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "success"
+            this.dataSnackbar.colorButton = "error"
+            this.dataSnackbar.timeoutSnackbar = 3000
+            this.dataSnackbar.showSnackbar = true
+          } else {
+            this.dataSnackbar.message = `Gagal upload file !`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "error"
+            this.dataSnackbar.colorButton = "error"
+            this.dataSnackbar.timeoutSnackbar = 3000
+            this.dataSnackbar.showSnackbar = true
+          }
+          updateReport && this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
+        }).catch(err => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          console.error(err)
+          this.dataSnackbar.message = `Gagal upload file ! ${err}`
           this.dataSnackbar.textButton = "Tutup"
           this.dataSnackbar.colorSnackbar = "error"
           this.dataSnackbar.colorButton = "error"
           this.dataSnackbar.timeoutSnackbar = 3000
           this.dataSnackbar.showSnackbar = true
-        }
-      }).catch(err => {
-        this.$store.dispatch('setLoadings', {isLoading: false})
-        console.error(err)
-        this.dataSnackbar.message = `Gagal upload file ! ${err}`
-        this.dataSnackbar.textButton = "Tutup"
-        this.dataSnackbar.colorSnackbar = "error"
-        this.dataSnackbar.colorButton = "error"
-        this.dataSnackbar.timeoutSnackbar = 3000
-        this.dataSnackbar.showSnackbar = true
-      })
+        })
+      }
+      updateReport && this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
     },
 
     getReportById(){
