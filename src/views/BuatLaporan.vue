@@ -155,9 +155,18 @@ export default {
     Snackbar,
   },
   computed: {
-      categories() {
-        return this.$store.getters.getReportCategories
-      },
+    categories() {
+      return this.$store.getters.getReportCategories
+    },
+    maxSizeFile() {
+      if (this.files===null || this.files===undefined) {
+        return [true]
+      } else {
+        return [
+          value => value.size < 2000000 || 'File size max 2 MB!',
+        ]
+      }
+    },
     districts() {
         return this.$store.getters.getDistricts
     },
@@ -191,9 +200,6 @@ export default {
       reportId: null,
       villageLoading: false,
       district_id: null,
-      maxSizeFile: [
-        value => value.size < 2000000 || 'File size max 2 MB!',
-      ],
       dataSnackbar: {
         showSnackbar: false,
         timeoutSnackbar: 3000,
@@ -231,7 +237,7 @@ export default {
               name: '',
             },
         ],
-      files: [],
+      files: null,
       select: null,
       menu: false,
       modal: false,
