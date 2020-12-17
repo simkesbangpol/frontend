@@ -72,7 +72,7 @@
                 </template>
             </v-simple-table>
             <v-row>
-              <v-col md="8" cols="12">
+              <v-col v-if="this.report.file!==null" md="8" cols="12">
                 <v-btn class="mt-5" outlined color="indigo" @click="downloadFile"><v-icon>mdi-download</v-icon>Unduh File</v-btn>
               </v-col>
               <v-col md="3" cols="12">
