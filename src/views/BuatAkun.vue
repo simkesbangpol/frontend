@@ -35,7 +35,7 @@
               item-value="id"
               :loading="villageLoading"
               no-data-text="Pilih Kecamatan"
-              :disabled="villages.length === 0"
+              :disabled="district_id===null"
               menu-props="auto"
               :rules="fieldRules"
             ></v-select>

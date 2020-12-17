@@ -63,7 +63,6 @@
             </v-col>
             <v-col cols="12" lg="4">
               <v-select
-                  style="margin-bottom: 30px;"
                   label="Kecamatan"
                   outlined
                   v-model="district_id"
@@ -77,7 +76,6 @@
             </v-col>
             <v-col cols="12" lg="4">
               <v-select
-                  style="margin-bottom: 30px;"
                   label="Kelurahan"
                   outlined
                   v-model="report.village_id"
@@ -86,7 +84,7 @@
                   item-value="id"
                   :loading="villageLoading"
                   no-data-text="Pilih Kecamatan"
-                  :disabled="villages.length === 0"
+                  :disabled="district_id===null"
                   menu-props="auto"
                   :rules="fieldRules"
               />
