@@ -21,7 +21,7 @@
               :items="districts"
               item-text="name"
               item-value="id"
-              @change="fetchVillages"
+              @change="fetchVillages(true)"
               menu-props="auto"
               :rules="fieldRules"
             ></v-select>
@@ -193,8 +193,8 @@ export default {
         })
       },
 
-      fetchVillages() {
-        this.user.village_id = null
+      fetchVillages(isFromOnChange) {
+        if (isFromOnChange) this.user.village_id = null
         this.villageLoading = true
         this.$store.dispatch('fetchVillages', { district_id: this.district_id })
         .then(() => {

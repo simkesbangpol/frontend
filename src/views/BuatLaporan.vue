@@ -71,8 +71,7 @@
                   item-text="name"
                   item-value="id"
                   menu-props="auto"
-                  hide-details
-                  @change="fetchVillages"
+                  @change="fetchVillages(true)"
                   :rules="fieldRules"
               />
             </v-col>
@@ -89,7 +88,6 @@
                   no-data-text="Pilih Kecamatan"
                   :disabled="villages.length === 0"
                   menu-props="auto"
-                  hide-details
                   :rules="fieldRules"
               />
             </v-col>
@@ -396,8 +394,8 @@ export default {
         })
     },
 
-    fetchVillages() {
-      this.report.village_id = null
+    fetchVillages(isFromOnChange) {
+      if (isFromOnChange) this.report.village_id = null
       this.villageLoading = true
       this.$store.dispatch('fetchVillages', { district_id: this.district_id }).then(() => {
         this.villageLoading = false
