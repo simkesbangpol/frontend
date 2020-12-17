@@ -236,7 +236,11 @@ export default {
       menu: false,
       modal: false,
       menu2: false,
+      initialRouteName: this.$route.name,
     }
+  },
+  beforeUpdate(){
+    if (this.$route.name!==this.initialRouteName) this.reloadPage()
   },
   mounted(){
     this.$route.params.id!==undefined && this.getReportById()
@@ -246,6 +250,9 @@ export default {
     this.$store.dispatch('fetchDistricts');
   },
   methods: {
+    reloadPage(){
+      window.location.reload()
+    },
     submit() {
       this.$store.dispatch('setLoadings', {isLoading: true})
       if (this.$route.params.id!==undefined) {
