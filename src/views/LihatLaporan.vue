@@ -222,7 +222,7 @@
                 <v-img class="mb-3" src="@/assets/format_import_excel.jpg" alt="" max-height="100%" max-width="100%" />
                 <h3 class="black--text">Daftar Tab Import File Excel</h3>
                 <v-img class="mb-3" src="@/assets/tab_format_import.jpg" alt="" max-height="50%" max-width="50%" />
-                <p class="mb-3 black--text">Data siswa mulai terbaca mulai baris kedua, baris pertama digunakan untuk judul.
+                <p class="mb-3 black--text">Data laporan terbaca mulai baris kedua, baris pertama digunakan untuk judul.
                   <br>
                   Format field :
                   <ol>
