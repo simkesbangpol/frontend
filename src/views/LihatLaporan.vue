@@ -22,7 +22,7 @@
           <template v-slot:top>
             <v-row no-gutters class="mr-1 ml-1" align="baseline">
               <v-col md="1" cols="12">
-                <v-btn color="primary" text @click="{}">
+                <v-btn color="primary" text @click="onExport">
                   <v-icon left >
                     mdi-file-export
                   </v-icon>
@@ -232,11 +232,11 @@
                     <li>Kelurahan : Harus terdaftar didalam tab "Kelurahan"</li>
                   </ol>
                 </p>
-                <v-btn>Download File Format</v-btn>
+                <v-btn @click="onDownloadTemplateImport">Download File Format</v-btn>
               </v-col>
               <v-col cols="12">
                 <v-file-input
-                  v-model="files"
+                  v-model="filesImport"
                   counter
                   label="File input"
                   placeholder="Select your files"
@@ -254,7 +254,7 @@
                       v-else-if="index === 2"
                       class="overline grey--text text--darken-3 mx-2"
                     >
-                      +{{ files.length - 2 }} File(s)
+                      +{{ filesImport.length - 2 }} File(s)
                     </span>
                   </template>
                 </v-file-input>
@@ -274,7 +274,7 @@
           <v-btn
             color="blue darken-1"
             text
-            @click="showImportModal = false"
+            @click="onImportFile"
           >
             Import
           </v-btn>
@@ -378,7 +378,7 @@ export default {
         district_id: null,
         village_id: null,
       },
-      files: [],
+      filesImport: null,
       date: ''
     }
   },
@@ -419,6 +419,58 @@ export default {
     this.fetchReports()
   },
   methods: {
+    onExport() {
+      client.get(`reports/export`)
+      .then(response => {
+        this.$store.dispatch('setLoadings', {isLoading: false})
+        if(response.status === 200){
+          this.dataSnackbar.message = `Berhasil import file !`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "success"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+          this.dataSnackbar.showSnackbar = true
+        }
+      })
+    },
+    onDownloadTemplateImport() {
+      const pathFile = `/template_import/template_import_laporan_testing.xlsx`
+      window.location = client.defaults.baseURL+pathFile.substring(1)
+    },
+    onImportFile(){
+      if (this.filesImport) {
+        this.$store.dispatch('setLoadings', {isLoading: true})
+        let formData = new FormData()
+        formData.append('file', this.filesImport)
+        client.post(`reports/import`, formData, {
+          headers: {
+            'Content-Type': 'multipart/form-data'
+          }
+        })
+        .then(response => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          if(response.status === 200){
+            this.showImportModal = false
+            this.dataSnackbar.message = `Berhasil import file !`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "success"
+            this.dataSnackbar.colorButton = "error"
+            this.dataSnackbar.timeoutSnackbar = 3000
+            this.dataSnackbar.showSnackbar = true
+            this.fetchReports()
+          }
+        }).catch(err => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          console.error(err)
+          this.dataSnackbar.message = `Gagal import file ! ${err}`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.timeoutSnackbar = 3000
+          this.dataSnackbar.showSnackbar = true
+        })
+      }
+    },
     validateVillageField() {
       if (this.filter.district_id!==null) this.rulesVillageField = [v => !!v || `Field ini harus diisi.`]
     },
