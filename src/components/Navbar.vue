@@ -10,7 +10,7 @@
         <v-img class="mr-3" src="@/assets/logo_kabupatentangerang.png" contain alt="" height="45px" width="45px" ></v-img>
       </v-toolbar-side-icon>
 
-      <v-toolbar-title style="font-size: 30px; font-weight: bold;">Sistem Aplikasi Pelaporan</v-toolbar-title>
+      <v-toolbar-title style="font-size: 30px; font-weight: bold;">Sistem Informasi Pelaporan Deteksi Dini Rawan Konflik Sosial</v-toolbar-title>
 
       <v-spacer></v-spacer>
 
