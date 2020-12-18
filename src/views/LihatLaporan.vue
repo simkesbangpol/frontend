@@ -56,7 +56,7 @@
               </v-col>
             </v-row>
           </template>
-          
+
           <template v-if="this.$store.getters.getRoles[0]==='admin'" v-slot:item.actions="{ item }">
             <v-row align="center">
               <v-btn color="primary" :to="`/detail-laporan/${item.id}`" icon>
@@ -420,11 +420,16 @@ export default {
   },
   methods: {
     onExport() {
-      client.get(`reports/export`)
-      .then(response => {
-        this.$store.dispatch('setLoadings', {isLoading: false})
+      client.get(`reports/export`, {
+        responseType: 'blob'
+      }).then(response => {
         if(response.status === 200){
-          this.dataSnackbar.message = `Berhasil import file !`
+          let blob = new Blob([response.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})
+          let link = document.createElement('a')
+          link.href = window.URL.createObjectURL(blob)
+          link.download = 'reports.xlsx'
+          link.click()
+          this.dataSnackbar.message = `Berhasil export file !`
           this.dataSnackbar.textButton = "Tutup"
           this.dataSnackbar.colorSnackbar = "success"
           this.dataSnackbar.colorButton = "error"
