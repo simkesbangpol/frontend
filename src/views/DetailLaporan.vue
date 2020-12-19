@@ -134,23 +134,6 @@ export default {
             { text: "Ditolak", value: 3 },
           ],
           selectedStatus: 0,
-          shownReportProps: [
-            'title',
-            'fact',
-            'date',
-            'location',
-            'description',
-            'action',
-            'recommendation',
-            'parsed_status',
-            'category'
-          ],
-          shownUserProps: [
-            'email',
-            'name',
-            'address',
-            'phone_number'
-          ],
           dataSnackbar: {
               showSnackbar: false,
               timeoutSnackbar: 0,
@@ -165,38 +148,63 @@ export default {
     this.fetchReport()
   },
   methods: {
-      fetchReport(){
-        this.$store.dispatch('setLoadings', {isLoading: true})
-        client.get(`reports/${this.$route.params.id}`)
-        .then(response => {
+    fetchReport(){
+      this.$store.dispatch('setLoadings', {isLoading: true})
+      client.get(`reports/${this.$route.params.id}`)
+      .then(response => {
+        this.$store.dispatch('setLoadings', {isLoading: false})
+        if (response.status === 200) {
+          this.report = response.data.data
+          this.getVillageByVillageId(this.report.village_id)
+        } else {
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = "Data gagal diperbarui ! "
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+        }
+      })
+      .catch((err) => {
           this.$store.dispatch('setLoadings', {isLoading: false})
-          if (response.status === 200) {
-            this.report = response.data.data
-            this.getDetailReport()
-          } else {
-            this.dataSnackbar.showSnackbar = true
-            this.dataSnackbar.message = "Data gagal diperbarui ! "
-            this.dataSnackbar.textButton = "Tutup"
-            this.dataSnackbar.colorSnackbar = "error"
-            this.dataSnackbar.colorButton = "error"
+          this.dataSnackbar.showSnackbar = true
+          this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
+          this.dataSnackbar.textButton = "Tutup"
+          this.dataSnackbar.colorSnackbar = "error"
+          this.dataSnackbar.colorButton = "error"
+      })
+    },
+    getVillageByVillageId(villageId){
+        this.$store.dispatch('setLoadings', {isLoading: true})
+        client.get('villages/'+villageId)
+        .then((response) => {
+          this.$store.dispatch('setLoadings', {isLoading: false})
+          if(response.status === 200){
+            this.report.district_id = response.data.data.district_id
+            this.report.village = response.data.data.name
           }
         })
-        .catch((err) => {
-            this.$store.dispatch('setLoadings', {isLoading: false})
-            this.dataSnackbar.showSnackbar = true
-            this.dataSnackbar.message = `Data gagal diperbarui ! ${err}`
-            this.dataSnackbar.textButton = "Tutup"
-            this.dataSnackbar.colorSnackbar = "error"
-            this.dataSnackbar.colorButton = "error"
+        .finally(() => {
+          this.getDistrictByDistrictId(this.report.district_id)
         })
-      },
+    },
+    getDistrictByDistrictId(districtId) {
+      client.get(`districts/${districtId}`)
+      .then((response) => {
+        if(response.status === 200){
+            this.report.district = response.data.data.name
+        }
+      })
+      .finally(() => {
+        this.getDetailReport()
+      })
+    },
     getDetailReport(){
         this.filteredReport = [
             {title: "Judul", desc: this.report.title},
             {title: "Kategori Laporan", desc: this.report.category.name},
             {title: "Fakta", desc: this.report.fact},
             {title: "Tanggal Kejadian", desc: this.report.date},
-            {title: "Wilayah Kejadian", desc: this.report.location+", "+this.report.village_id},
+            {title: "Wilayah Kejadian", desc: `${this.report.location}, Kelurahan ${this.report.village}, Kecamatan ${this.report.district}`},
             {title: "Tindakan", desc: this.report.action},
             {title: "Rekomendasi", desc: this.report.recommendation},
         ]
