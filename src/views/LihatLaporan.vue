@@ -421,7 +421,9 @@ export default {
   methods: {
     onExport() {
       client.get(`reports/export`, {
-        responseType: 'blob'
+        responseType: 'blob',  params: {
+          ...(this.isFiltered ? this.filter : {}),
+        }
       }).then(response => {
         if(response.status === 200){
           let blob = new Blob([response.data], {type: 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'})
