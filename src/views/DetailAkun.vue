@@ -84,7 +84,7 @@ export default {
                     this.idUser = dataUser.id
                     this.detailAkun = [
                         {title: "Nama", desc: dataUser.name},
-                        {title: "Alamat", desc: dataUser.address+", "+dataUser.village.name+", "+dataUser.district.name},
+                        {title: "Alamat", desc: `${dataUser.address}, Kelurahan ${dataUser.village.name}, Kecamatan ${dataUser.district.name}`},
                         {title: "No Telp", desc: dataUser.phone_number},
                         {title: "Email", desc: dataUser.email},
                         {title: "Role Akses", desc: dataUser.roles[0]},
