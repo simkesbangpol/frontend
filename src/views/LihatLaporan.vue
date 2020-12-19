@@ -212,7 +212,7 @@
     >
       <v-card>
         <v-card-title>
-          <span class="headline">Import File</span>
+          <span class="headline font-weight-bold">Import File</span>
         </v-card-title>
         <v-card-text>
           <v-container>
