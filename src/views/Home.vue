@@ -149,8 +149,12 @@ export default {
     },
   },
   mounted() {
-    this.$store.dispatch('setLoadings', {isLoading: true})
-    this.fetchSummary()
+    if(this.$store.getters.getRoles[0] !== 'user'){
+      this.$store.dispatch('setLoadings', {isLoading: true})
+      this.fetchSummary()
+      this.fetchLatestReports()
+      this.fetchOnProgressReports()
+    }
   },
   methods: {
     navigateToReportList(filterField){
@@ -187,14 +191,12 @@ export default {
           this.categories = data
         }
       })
-      .finally(() => this.fetchLatestReports())
     },
     fetchLatestReports(){
       client.get('dashboard/reports/status/0')
       .then(response => {
         this.tables[0].reports = response.data.data.data
       })
-      .finally(() => this.fetchOnProgressReports())
     },
     fetchOnProgressReports(){
       client.get('dashboard/reports/status/1').then(response => {
