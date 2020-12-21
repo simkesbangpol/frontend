@@ -68,7 +68,7 @@
           <v-card-text>
             <v-row class="d-flex flex-wrap flex-row">
                 <v-flex v-for="(category, index) in categories" :key="index" >
-                  <v-card class="text-center ma-3" router :disabled="category.report_count===0" @click="navigateToReportList({category_id: category.id})" style="text-decoration: none;">
+                  <v-card class="text-center ma-3" router :disabled="category.report_count===0" @click="navigateToReportList({category_id: category.id, date_start: filter.date_start, date_end: filter.date_end})" style="text-decoration: none;">
                     <div>
                       <v-icon size="80" :color="colorSentIcon[index]">mdi-send mdi-rotate-315</v-icon>
                     </div>
