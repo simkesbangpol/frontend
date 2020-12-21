@@ -380,6 +380,7 @@ export default {
             this.report.recommendation = dataReport.recommendation
             this.report.village_id = dataReport.village_id
             this.report.user_id = dataReport.user_id
+            this.report.status = dataReport.status
             this.getVillageByVillageId(this.report.village_id)
           } else {
             this.dataSnackbar.showSnackbar = true
