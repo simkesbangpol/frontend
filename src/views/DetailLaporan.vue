@@ -199,23 +199,31 @@ export default {
       })
     },
     getDetailReport(){
+      client.get(`villages/${this.report.user.village_id}`)
+      .then((response) => {
+        if(response.status === 200){
+          this.report.user.village = response.data.data.name
+        }
+      })
+      .finally(() => {
         this.filteredReport = [
-            {title: "Judul", desc: this.report.title},
-            {title: "Kategori Laporan", desc: this.report.category.name},
-            {title: "Fakta", desc: this.report.fact},
-            {title: "Tanggal Kejadian", desc: this.report.date},
-            {title: "Wilayah Kejadian", desc: `${this.report.location}, Kelurahan ${this.report.village}, Kecamatan ${this.report.district}`},
-            {title: "Tindakan", desc: this.report.action},
-            {title: "Rekomendasi", desc: this.report.recommendation},
+          {title: "Judul", desc: this.report.title},
+          {title: "Kategori Laporan", desc: this.report.category.name},
+          {title: "Fakta", desc: this.report.fact},
+          {title: "Tanggal Kejadian", desc: this.report.date},
+          {title: "Wilayah Kejadian", desc: `${this.report.location}, Kelurahan ${this.report.village}, Kecamatan ${this.report.district}`},
+          {title: "Tindakan", desc: this.report.action},
+          {title: "Rekomendasi", desc: this.report.recommendation},
         ]
         this.filteredProfile = [
-            {title: "Nama", desc: this.report.user.name},
-            {title: "Username", desc: this.report.user.username},
-            {title: "Email", desc: this.report.user.email},
-            {title: "No Telp", desc: this.report.user.phone_number},
-            {title: "Alamat", desc: this.report.user.address+", "+this.report.user.village_id},
+          {title: "Nama", desc: this.report.user.name},
+          {title: "Username", desc: this.report.user.username},
+          {title: "Email", desc: this.report.user.email},
+          {title: "No Telp", desc: this.report.user.phone_number},
+          {title: "Alamat", desc: `${this.report.user.address}, Kelurahan ${this.report.user.village}`},
         ]
         this.selectedStatus = this.report.status
+      })
     },
     downloadFile(){
         window.location = client.defaults.baseURL+this.report.file.substring(1)
@@ -233,7 +241,6 @@ export default {
           this.dataSnackbar.colorSnackbar = "success"
           this.dataSnackbar.colorButton = "error"
           this.dataSnackbar.timeoutSnackbar = 3000
-          this.getDetailReport()
         } else {
           this.dataSnackbar.showSnackbar = true
           this.dataSnackbar.message = `Data gagal diperbarui !`
