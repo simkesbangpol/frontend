@@ -222,14 +222,13 @@
                 <v-img class="mb-3" src="@/assets/format_import_excel.jpg" alt="" max-height="100%" max-width="100%" />
                 <h3 class="black--text">Daftar Tab Import File Excel</h3>
                 <v-img class="mb-3" src="@/assets/tab_format_import.jpg" alt="" max-height="50%" max-width="50%" />
-                <p class="mb-3 black--text">Data laporan terbaca mulai baris kedua, baris pertama digunakan untuk judul.
-                  <br>
-                  Format field :
+                <p class="mb-3 black--text">Data laporan terbaca mulai baris kedua, baris pertama digunakan untuk judul. <strong>Ketentuan pengisian dan format field Ketentuan pengisian dan format field :</strong>
                   <ol>
                     <li>Kategori Laporan : Ideologi, Politik, Ekonomi, Sosial, dan Budaya</li>
-                    <li>Tanggal Kejadian : Tanggal/Bulan/Tahun</li>
+                    <li>Tanggal Kejadian : Tahun-Tanggal-Bulan</li>
                     <li>Kecamatan : Harus terdaftar didalam tab "Kecamatan"</li>
                     <li>Kelurahan : Harus terdaftar didalam tab "Kelurahan"</li>
+                    <li>Seluruh kolom ini (Judul,	Kategori Laporan, Fakta, Tanggal Kejadian, Wilayah Kejadian, Kecamatan, Kelurahan, Uraian, Kejadian, Tindakan, Rekomendasi, Id_Kecamatan, Id_Kelurahan, Id_Kategori) harus berformat <strong>"Text"</strong>.</li>
                   </ol>
                 </p>
                 <v-btn @click="onDownloadTemplateImport">Download File Format</v-btn>
@@ -441,7 +440,7 @@ export default {
       })
     },
     onDownloadTemplateImport() {
-      const pathFile = `/template_import/template_import_laporan_testing.xlsx`
+      const pathFile = `/template_import/template_import_laporan.xlsx`
       window.location = client.defaults.baseURL+pathFile.substring(1)
     },
     onImportFile(){
