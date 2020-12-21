@@ -167,7 +167,7 @@ export default {
       this.$router.push({name: 'Login'})
     },
     onClickProfile() {
-      client.get(`users/${this.user.id}`)
+      client.get(`auth`)
       .then(response => {
         if(response.status === 200){
           const dataUser = response.data.data
