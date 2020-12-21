@@ -295,6 +295,11 @@ export default {
           this.$store.dispatch('setLoadings', {isLoading: false})
           if(response.status === 200){
             this.reportId = response.data.data.id
+            this.dataSnackbar.message = `Data berhasil terkirim !`
+            this.dataSnackbar.textButton = "Tutup"
+            this.dataSnackbar.colorSnackbar = "success"
+            this.dataSnackbar.colorButton = "error"
+            this.dataSnackbar.timeoutSnackbar = 3000
             this.uploadFile()
           } else {
             this.dataSnackbar.message = `Data gagal terkirim !`
@@ -331,11 +336,6 @@ export default {
         .then(response => {
           this.$store.dispatch('setLoadings', {isLoading: false})
           if(response.status === 200){
-            this.dataSnackbar.message = `Data berhasil terkirim !`
-            this.dataSnackbar.textButton = "Tutup"
-            this.dataSnackbar.colorSnackbar = "success"
-            this.dataSnackbar.colorButton = "error"
-            this.dataSnackbar.timeoutSnackbar = 3000
             this.dataSnackbar.showSnackbar = true
           } else {
             this.dataSnackbar.message = `Gagal upload file !`
@@ -355,9 +355,12 @@ export default {
           this.dataSnackbar.colorButton = "error"
           this.dataSnackbar.timeoutSnackbar = 3000
           this.dataSnackbar.showSnackbar = true
+          updateReport && this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
         })
+      } else {
+        this.dataSnackbar.showSnackbar = true
+        updateReport && this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
       }
-      updateReport && this.$router.push({ name: `${this.breadcrumbsItems[0].name}`, params: {dataSnackbar: this.dataSnackbar} })
     },
 
     getReportById(){
